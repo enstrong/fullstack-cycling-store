@@ -1,12 +1,5 @@
-# React + Vite
+# React + Vite + PostgreSQL
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+This is my course work from the end of the 2nd year of studies at Astana IT College. Basically it's a bike shop, which was supposed to be a 1 page website at the beginning, and then the teachers decided to randomly add a new requierement of 2 pages at least. As a 1 page website though, it had incredible optimization and UI, though a lot of the safety and even authorization page is lacking, because I was told it wasn't required. It also wasn't required to be booted on other devices, so unfortunately a year ago I just didn't deploy this stuff anywhere and so one can view it. But I do have some screenshots for you.
+<img width="1089" height="612" alt="telegram-cloud-photo-size-2-5444951799350629972-y" src="https://github.com/user-attachments/assets/97d60b5b-1739-4e6b-9c68-87f0bf13b859" />
+<img width="1089" height="614" alt="telegram-cloud-photo-size-2-5444951799350629974-y" src="https://github.com/user-attachments/assets/bda13ddc-4b3f-43a3-b25f-87a8421f0401" />
