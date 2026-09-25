@@ -27,6 +27,7 @@ async function migrate(pool) {
       "003-order-images",
       "004-safety-constraints",
       "005-shipping-details",
+      "006-product-research",
     ]) {
       const done = await client.query(
         "SELECT name FROM schema_migrations WHERE name=$1",
@@ -39,6 +40,24 @@ async function migrate(pool) {
             "utf8",
           ),
         );
+        if (name === "006-product-research") {
+          const entries = JSON.parse(
+            await fs.readFile(
+              path.join(__dirname, "data/product-research.json"),
+              "utf8",
+            ),
+          );
+          for (const entry of entries) {
+            await client.query(
+              "UPDATE products SET research=$1,description=$2 WHERE name=$3",
+              [
+                JSON.stringify(entry.research),
+                entry.research.description,
+                entry.name,
+              ],
+            );
+          }
+        }
         await client.query("INSERT INTO schema_migrations(name) VALUES($1)", [
           name,
         ]);

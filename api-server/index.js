@@ -163,7 +163,7 @@ function createApp(pool, adminApiKey = process.env.ADMIN_API_KEY, config = {}) {
   });
   app.put("/api/products/:id", requireAdmin, async (req, res) => {
     const result = await pool.query(
-      "UPDATE products SET category_id=$1,name=$2,description=$3,price=$4,icon=$5,stock_quantity=$6 WHERE product_id=$7 RETURNING *",
+      "UPDATE products SET research=CASE WHEN name=$2 AND category_id=$1 THEN research ELSE NULL END,category_id=$1,name=$2,description=$3,price=$4,icon=$5,stock_quantity=$6 WHERE product_id=$7 RETURNING *",
       [...productValues(req.body), req.params.id],
     );
     if (!result.rowCount) throw fail(404, "Product not found.");

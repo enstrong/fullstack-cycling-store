@@ -1,4 +1,6 @@
 import { useLayoutEffect } from "react";
+import ComparisonProvider from "@/components/comparison-provider.jsx";
+import Compare from "@/components/tabs/compare.jsx";
 import { AuthProvider } from "@/auth";
 import Account from "@/components/tabs/account.jsx";
 import {
@@ -23,26 +25,29 @@ export default function App() {
   return (
     <Router>
       <AuthProvider>
-        <RoutePosition />
-        <div className="wrapper">
-          <Header />
+        <ComparisonProvider>
+          <RoutePosition />
+          <div className="wrapper">
+            <Header />
 
-          <div className="route-content">
-            <Routes>
-              <Route path="/" element={<Bikes />} />
-              <Route path="/teams" element={<Teams />} />
-              <Route path="/gear" element={<Gear />} />
-              <Route path="/support" element={<Support />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/cart/checkout" element={<Checkout />} />
-              <Route path="/account" element={<Account />} />
-            </Routes>
+            <div className="route-content">
+              <Routes>
+                <Route path="/" element={<Bikes />} />
+                <Route path="/teams" element={<Teams />} />
+                <Route path="/gear" element={<Gear />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/cart/checkout" element={<Checkout />} />
+                <Route path="/compare" element={<Compare />} />
+                <Route path="/account" element={<Account />} />
+              </Routes>
+            </div>
+
+            <Footer />
+            <ScrollToTop />
           </div>
-
-          <Footer />
-          <ScrollToTop />
-        </div>
+        </ComparisonProvider>
       </AuthProvider>
     </Router>
   );

@@ -1,3 +1,4 @@
+import CompareLink from "@/components/compare-link.jsx";
 import { useAuth } from "@/auth";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -7,9 +8,16 @@ import TdFlogo from "/icons/TdF_logo_white.png";
 
 function CartIcon() {
   return (
-    <svg className="header-action-icon" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"
-      strokeLinejoin="round" aria-hidden="true">
+    <svg
+      className="header-action-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
       <path d="M2 3h2l2.5 12h13l2-8H5" />
       <circle cx="8" cy="20" r="1" />
       <circle cx="18" cy="20" r="1" />
@@ -82,7 +90,7 @@ export default function Header() {
   };
 
   return (
-    <div className="header">
+    <div className={`header ${pathname === "/compare" ? "header-comparison" : ""}`}>
       <div className="container header-content">
         {isMobile ? (
           <>
@@ -96,6 +104,7 @@ export default function Header() {
                 >
                   <CartIcon />
                 </Link>
+                <CompareLink />
                 <AccountIcon />
               </div>
 
@@ -193,6 +202,7 @@ export default function Header() {
             <Link to="/cart" onClick={handleClick} aria-label="Cart">
               <CartIcon />
             </Link>
+            <CompareLink />
             <AccountIcon />
           </nav>
         )}

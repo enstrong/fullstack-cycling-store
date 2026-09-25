@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useComparison } from "@/comparison-context";
+import ProductFacts from "@/components/product-facts.jsx";
+import "@/css/tabs/compare.css";
 import { api, money } from "@/api";
 import "@/css/tabs/gear.css";
 function ProductCard({ product, category, add, busy }) {
+  const { ids, toggle } = useComparison();
+  const selected = ids.includes(product.product_id);
   return (
     <article className={`shop-card ${category === "Bikes" ? "bike-card" : ""}`}>
       <div className="shop-card-visual">
@@ -17,7 +22,23 @@ function ProductCard({ product, category, add, busy }) {
           <h3>{product.name}</h3>
           <span>{money(product.price)}</span>
         </div>
+        <span className="heritage-tag">
+          {product.research?.connection || "Winner link unverified"}
+        </span>
         <p>{product.description}</p>
+        <ProductFacts product={product} />
+        <button
+          className={`compare-product ${selected ? "selected" : ""}`}
+          aria-pressed={selected}
+          disabled={!selected && ids.length >= 4}
+          onClick={() => toggle(product.product_id)}
+        >
+          {selected
+            ? "✓ Selected for comparison"
+            : ids.length >= 4
+              ? "Comparison full (4 / 4)"
+              : "+ Compare this product"}
+        </button>
         <button
           className="add-product"
           disabled={busy || product.stock_quantity < 1}
@@ -123,13 +144,14 @@ export default function Gear() {
         <div className="shop-hero-copy">
           <span className="eyebrow">THE WINNER BIKES COLLECTION / 01</span>
           <h1>
-            Chase the ride.
+            The riders. The victories.
             <br />
-            <em>Find your edge.</em>
+            <em>Their equipment.</em>
           </h1>
           <p>
-            From the first climb to the final sprint. Exceptional bikes and
-            considered essentials, made for the miles ahead.
+            Explore equipment connected to Tour de France champions, from
+            historic winning machines to the gear they rode next. Every verified
+            connection has a story. Every unconfirmed detail is marked.
           </p>
           <a href="#collection" className="shop-explore">
             Explore the collection <span>↓</span>
@@ -151,9 +173,9 @@ export default function Gear() {
       </section>
       <div className="shop-trust">
         <div className="container">
-          <span>Race-inspired performance</span>
+          <span>Tour-winning heritage</span>
           <span>Complimentary shipping</span>
-          <span>Made for your next chapter</span>
+          <span>Specs with sources</span>
         </div>
       </div>
       <section id="collection" className="shop-collection container">

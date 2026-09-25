@@ -1,0 +1,1040 @@
+[
+  {
+    "name": "MET Trenta 3k",
+    "research": {
+      "group": "helmets",
+      "model": "Trenta 3K Carbon Mips (pre-2025 redesign)",
+      "description": "A ventilated carbon-reinforced road helmet associated with Tadej Pogačar. Its open channels and compact shape made the Trenta family a familiar sight on the Tour’s mountain roads.",
+      "riders": "Tadej Pogačar",
+      "connection": "Tour winner connection",
+      "note": "Specs refer to the older Mips base model. The exact Pogačar paint edition and its winning-season count are unverified.",
+      "specs": {
+        "weight": {
+          "value": 225,
+          "note": "Manufacturer reference, medium; regional certification may vary.",
+          "basis": "helmet-medium"
+        },
+        "material": {
+          "value": "Polycarbonate shell, EPS foam, 3K carbon cage"
+        },
+        "sizes": {
+          "value": "S 52–56 / M 56–58 / L 58–61 cm"
+        },
+        "purpose": {
+          "value": "Road / climbing"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "protection": {
+          "value": "Mips Air"
+        },
+        "vents": {
+          "value": 19
+        },
+        "fit": {
+          "value": "Safe-T Orbital"
+        }
+      },
+      "sources": [
+        {
+          "label": "MET technical sheet (Mips generation)",
+          "url": "https://pim.veloplace.com/documents/met/met-specs-trenta-3k-carbon-mips.pdf"
+        },
+        {
+          "label": "MET official Japanese distributor: sizes and weights",
+          "url": "https://www.mizutanibike.co.jp/products/detail/1619/"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "S-Works TT 5",
+    "research": {
+      "group": "helmets",
+      "model": "S-Works TT 5",
+      "description": "A dedicated time-trial helmet built around a close-fitting head sock and optical shield. Its design targets airflow around the rider’s head and shoulders rather than all-day road ventilation.",
+      "riders": "Unknown — exact winner use unverified",
+      "connection": "Winner link unverified",
+      "note": "Existing catalogue item retained. A time-trial helmet serves a different purpose from a ventilated road helmet; the original Evenepoel attribution is not evidence of a Tour overall win.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": null
+        },
+        "sizes": {
+          "value": "S / M / L"
+        },
+        "purpose": {
+          "value": "Time trial"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "protection": {
+          "value": "Mips Air Node"
+        },
+        "closure": {
+          "value": null
+        },
+        "visor": {
+          "value": "Class 1 optical shield"
+        },
+        "fit": {
+          "value": "Occipital Base Adjustment; adjustable Tri-Fix straps"
+        }
+      },
+      "sources": [
+        {
+          "label": "Specialized TT 5",
+          "url": "https://www.specialized.com/nl/nl/s-works-tt-5/p/1000252641"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Giro Aries Spherical",
+    "research": {
+      "group": "helmets",
+      "model": "Aries Spherical / Visma colourway",
+      "description": "A lightweight road helmet combining a two-piece Spherical shell with deep airflow channels. Jonas Vingegaard’s association with the Visma Aries connects it to the collection’s Tour-winning riders.",
+      "riders": "Jonas Vingegaard",
+      "connection": "Tour winner connection",
+      "note": "Specifications describe the Aries Spherical base model. A signed-helmet association does not establish a count of winning Tour campaigns.",
+      "specs": {
+        "weight": {
+          "value": 270,
+          "note": "Medium, CE-certified version.",
+          "basis": "helmet-medium"
+        },
+        "material": {
+          "value": "In-mould polycarbonate, EPS foam, AURA II reinforcement"
+        },
+        "sizes": {
+          "value": "S / M / L"
+        },
+        "purpose": {
+          "value": "Road / climbing"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "protection": {
+          "value": "Spherical Technology powered by Mips"
+        },
+        "fit": {
+          "value": "Roc Loc 5+ Air"
+        },
+        "vents": {
+          "value": 24
+        }
+      },
+      "sources": [
+        {
+          "label": "Giro Aries specifications",
+          "url": "https://www.giro.com/product/aries-spherical/100000000300000146S.html"
+        },
+        {
+          "label": "Giro: Jonas Vingegaard Visma Aries",
+          "url": "https://ie.giro.com/giveaway.html"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Oakley Kato – Tour de France Edition",
+    "research": {
+      "group": "glasses",
+      "model": "Oakley Kato",
+      "description": "A close-wrapping shield with a distinctive nose contour and adjustable lens angle. Mark Cavendish helped test Kato prototypes; that is a sprinting connection, not proof of use by an overall Tour winner.",
+      "riders": "Mark Cavendish (prototype testing)",
+      "connection": "Winner link unverified",
+      "note": "Kato is not Velo Kato. Exact Tour edition year, weight and lens transmission are unverified.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": "O Matter stems; Unobtainium contact points"
+        },
+        "sizes": {
+          "value": null
+        },
+        "purpose": {
+          "value": "Performance eyewear"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "lens": {
+          "value": "Prizm; exact lens tint unknown"
+        },
+        "fit": {
+          "value": "Adjustable rake; interchangeable nose pads"
+        }
+      },
+      "sources": [
+        {
+          "label": "Oakley Kato launch and athlete testing",
+          "url": "https://oakley-media-hub.prezly.com/introducing-oakley-kato-the-ground-breaking-eyewear-set-to-revolutionize-the-face-of-sport"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "100% Speedcraft – Peter Sagan Signature Series",
+    "research": {
+      "group": "glasses",
+      "model": "Speedcraft / Peter Sagan signature family",
+      "description": "Peter Sagan’s signature shield is known for its broad view and grippy contact points. Its heritage is tied to a world champion and Tour points-classification winner, not a Tour overall winner.",
+      "riders": "Peter Sagan",
+      "connection": "Winner link unverified",
+      "note": "Signature editions vary by year. Base Speedcraft construction is shown; edition-specific weight and lens figures remain unknown.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": "TR90 frame; polycarbonate lens"
+        },
+        "sizes": {
+          "value": "Standard; exact signature-edition fit unknown"
+        },
+        "purpose": {
+          "value": "Performance eyewear"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "lens": {
+          "value": "Interchangeable shield; exact signature tint unknown"
+        },
+        "fit": {
+          "value": "Ultra-grip rubber nose and temple pads"
+        }
+      },
+      "sources": [
+        {
+          "label": "100%: Sagan limited collection",
+          "url": "https://www.100percent.com/blogs/blog/peter-sagan-limited-edition-collection"
+        },
+        {
+          "label": "100% Speedcraft specifications",
+          "url": "https://www.100percent.com/products/speedcraft-soft-tact-black-smoke-lens"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "POC Aspire Clarity – EF Pro Team Edition",
+    "research": {
+      "group": "glasses",
+      "model": "Aspire Clarity (base model)",
+      "description": "A broad shield with a flexible Grilamid frame and Clarity optics developed with Zeiss. Aspire blends cycling coverage with an everyday shape; the catalogue’s exact EF edition and rider use are unverified.",
+      "riders": "Unknown",
+      "connection": "Winner link unverified",
+      "note": "The 42 g reference is the standard Aspire, not an independently verified EF team SKU.",
+      "specs": {
+        "weight": {
+          "value": 42,
+          "note": "One-size base model.",
+          "basis": "eyewear"
+        },
+        "material": {
+          "value": "Grilamid frame; rubber contact points"
+        },
+        "sizes": {
+          "value": "One size"
+        },
+        "purpose": {
+          "value": "Road / MTB / commuting"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "lens": {
+          "value": "Clarity Road (base model)"
+        },
+        "fit": {
+          "value": "Grippy nose and temple contacts"
+        }
+      },
+      "sources": [
+        {
+          "label": "POC Aspire specifications",
+          "url": "https://poc.com/en-us/product/aspire-uranium-black-clarity-road-partly-sunny-gold"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Tour de France Official Racing Gloves",
+    "research": {
+      "group": "gloves",
+      "model": "Tour / Maillot Jaune gloves — exact SKU unknown",
+      "description": "A Tour-themed short-finger accessory for everyday rides. Santini’s Maillot Jaune range includes breathable gloves with shock-absorbing palms, but a race-used match for this listing has not been established.",
+      "riders": "Unknown",
+      "connection": "Winner link unverified",
+      "note": "The source establishes the product family only. Exact manufacturer code, fabric, sizing, weight and professional use for this catalogue image are unknown.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": null
+        },
+        "sizes": {
+          "value": null
+        },
+        "purpose": {
+          "value": "Road cycling"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "padding": {
+          "value": null
+        }
+      },
+      "sources": [
+        {
+          "label": "Santini Maillot Jaune gloves (reference family)",
+          "url": "https://www.santinicycling.com/en/official-tour-de-france-apparel/le-maillot-jaune-gloves-4173.html"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Rapha Pro Team Gloves – Team EF Education-EasyPost",
+    "research": {
+      "group": "gloves",
+      "model": "Rapha Pro Team mitts (reference family)",
+      "description": "Race-focused mitts with a close fit and light construction. Rapha’s Pro Team line is built for racing, but the exact EF glove edition and a Tour-winning wearer are not confirmed for this listing.",
+      "riders": "Unknown",
+      "connection": "Winner link unverified",
+      "note": "Current Pro Team Mitts are a reference, not proof of the pictured EF edition. Fabric percentages and weight remain unknown.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": null
+        },
+        "sizes": {
+          "value": "XXS / XS / S / M / L / XL (current base mitt)"
+        },
+        "purpose": {
+          "value": "Road racing"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "padding": {
+          "value": "Minimal, high-density padding (Pro Team mitt family)"
+        }
+      },
+      "sources": [
+        {
+          "label": "Rapha Pro Team Mitts",
+          "url": "https://www.rapha.cc/rd/en/product/pro-team-mitts/PTM08XX"
+        },
+        {
+          "label": "Rapha glove range and padding guidance",
+          "url": "https://www.rapha.cc/us/en/shop/gloves"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Specialized SL Pro Gloves – Julian Alaphilippe Edition",
+    "research": {
+      "group": "gloves",
+      "model": "SL Pro Short Finger (base model)",
+      "description": "A thin Clarino palm prioritises handlebar feel, while a mesh upper and slip-on cuff keep the fit simple. The Julian Alaphilippe edition claimed by the original catalogue has not been verified.",
+      "riders": "Unknown — named edition unverified",
+      "connection": "Winner link unverified",
+      "note": "Base-model specs only. Alaphilippe’s race history does not establish a Tour overall-winner connection for these gloves.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": "Upper: 92% polyester / 8% PU; palm: 60% nylon / 40% PU"
+        },
+        "sizes": {
+          "value": "S / M / L / XL / XXL"
+        },
+        "purpose": {
+          "value": "Road racing"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "padding": {
+          "value": "Ultra-thin Clarino palm"
+        },
+        "closure": {
+          "value": "Slip-on cuff"
+        }
+      },
+      "sources": [
+        {
+          "label": "Specialized SL Pro gloves",
+          "url": "https://www.specialized.com/us/en/mens-sl-pro-gloves/p/156946"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Tour de France Official Yellow Jersey 2024",
+    "research": {
+      "group": "jerseys",
+      "model": "2024 yellow jersey — retail variant unconfirmed",
+      "description": "The yellow jersey is the visual signature of the Tour’s overall leader. Santini supplied the leaders’ jerseys in 2024, when Tadej Pogačar won; the precise retail replica versus race jersey version here is unverified.",
+      "riders": "Tadej Pogačar (2024 race leader jersey)",
+      "connection": "Tour-inspired replica",
+      "note": "No race-jersey weight or fabric is assigned to an unidentified retail variant. Tour victories for this exact retail item are unknown.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": null
+        },
+        "sizes": {
+          "value": null
+        },
+        "purpose": {
+          "value": "Road / commemorative apparel"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        }
+      },
+      "sources": [
+        {
+          "label": "Santini official partnership",
+          "url": "https://custom.santinicycling.com/en/content/partnerships-2019-42"
+        },
+        {
+          "label": "Tour organiser: 2024 Maillot Jaune collection",
+          "url": "https://www.letour.fr/en/news/2024/maillot-jaune-2024-range-a-collection-that-hits-the-heights/1316931"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Tadej Pogačar UAE Team Emirates Special Edition Jersey",
+    "research": {
+      "group": "jerseys",
+      "model": "UAE Team Emirates 2023 replica — exact SKU unknown",
+      "description": "A tribute to Pogačar’s UAE team colours. Pissei became the team’s clothing supplier in 2023; its race kits and consumer replicas are distinct products, so their technical figures must not be mixed.",
+      "riders": "Tadej Pogačar (team-kit association)",
+      "connection": "Tour-inspired replica",
+      "note": "The catalogue’s special-edition SKU, Slovenian details, material, sizes and weight could not be independently matched. Pogačar did not win the 2023 Tour.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": null
+        },
+        "sizes": {
+          "value": null
+        },
+        "purpose": {
+          "value": "Road / team replica"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        }
+      },
+      "sources": [
+        {
+          "label": "UAE: Pissei partnership from 2023",
+          "url": "https://www.uaeteamemirates.com/uae-team-emirates-announce-pissei-clothing-sponsor/"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "INEOS Grenadiers Aero Race Jersey",
+    "research": {
+      "group": "jerseys",
+      "model": "Castelli Aero Race 6.0 (reference model)",
+      "description": "The Aero Race family uses carefully placed fabrics and seams to manage airflow in a racing position. This listing recalls INEOS’s Castelli era; exact rider use and the jersey generation pictured remain unverified.",
+      "riders": "Unknown — exact jersey not matched",
+      "connection": "Winner link unverified",
+      "note": "These are base Aero Race 6.0 figures, not verified specifications for the exact INEOS edition.",
+      "specs": {
+        "weight": {
+          "value": 156,
+          "note": "Base Aero Race 6.0; reference size not stated."
+        },
+        "material": {
+          "value": "Velocity Rev2 front/sleeves; 3D mesh back"
+        },
+        "sizes": {
+          "value": "XS / S / M / L / XL / XXL / 3XL"
+        },
+        "purpose": {
+          "value": "Road racing"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "fit": {
+          "value": "Race"
+        },
+        "pockets": {
+          "value": 3
+        },
+        "temperature": {
+          "value": "18–35 °C"
+        },
+        "closure": {
+          "value": "YKK Vislon zip"
+        }
+      },
+      "sources": [
+        {
+          "label": "Castelli Aero Race 6.0",
+          "url": "https://www.castelli-cycling.com/GB/en/Men/Cycling/Top/Jerseys/Short-sleeve/AERO-RACE-6-0-JERSEY/p/4523009_383_52_M"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Sidi Shot 2 Limited Edition Tour de France",
+    "research": {
+      "group": "shoes",
+      "model": "Sidi Shot 2 (2021/22 reference model)",
+      "description": "Chris Froome named the Shot 2 his preferred shoe in 2022, praising its central twin dials and carbon sole. A connection to a Tour champion; his earlier Tour victories do not belong to this later shoe generation.",
+      "riders": "Chris Froome — four-time Tour de France overall winner",
+      "connection": "Tour winner connection",
+      "note": "Specs refer to Shot 2, not the later Shot 2S. Edition, reference weight and winning rider are unknown.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": "Microfibre Techpro / mesh; carbon sole"
+        },
+        "sizes": {
+          "value": "EU 38–48; half sizes through 46.5"
+        },
+        "purpose": {
+          "value": "Road racing"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "closure": {
+          "value": "Tecno-3 Push Flex"
+        },
+        "sole": {
+          "value": "C-Boost SRS carbon; replaceable inserts"
+        },
+        "fit": {
+          "value": "Adjustable heel retention"
+        }
+      },
+      "sources": [
+        {
+          "label": "Sidi 2021/22 manufacturer workbook",
+          "url": "https://dev.bikeperfection.ch/wp-content/uploads/2022/03/2022-Sidi.pdf"
+        },
+        {
+          "label": "Chris Froome interview · Shot 2 (2022)",
+          "url": "https://bici.pro/cycling-industry/froome-12-anni-sidi-shot-2-preferite/"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Shimano S-Phyre RC903 Team Edition",
+    "research": {
+      "group": "shoes",
+      "model": "Shimano S-PHYRE RC903",
+      "description": "A lightweight race shoe with a wrapping microfiber upper and two BOA dials. The anti-twist heel and carbon sole focus on a secure pedalling platform; the exact team edition is unverified.",
+      "riders": "Unknown — exact team SKU not identified",
+      "connection": "Winner link unverified",
+      "note": "Manufacturer regional sizing shown. The word “Team Edition” alone cannot establish a winning rider or Tour count.",
+      "specs": {
+        "weight": {
+          "value": 225,
+          "note": "Per shoe; manufacturer reference.",
+          "basis": "single-shoe-reference"
+        },
+        "material": {
+          "value": "Microfiber upper; carbon-fibre composite outsole"
+        },
+        "sizes": {
+          "value": "EU 40–48 standard; half sizes 40–46.5; wide 40–46 (North America)"
+        },
+        "purpose": {
+          "value": "Road racing"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "closure": {
+          "value": "Dual BOA Li2"
+        },
+        "sole": {
+          "value": "Carbon; Shimano stiffness index 12"
+        },
+        "fit": {
+          "value": "Standard and wide; DYNALAST"
+        },
+        "cleats": {
+          "value": "SPD-SL / three-bolt road"
+        }
+      },
+      "sources": [
+        {
+          "label": "Shimano RC903 technical overview",
+          "url": "https://ride.shimano.com/blogs/blogs-and-news/new-shimano-s-phyre-rc903-road-shoes"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Fizik Vento Infinito Carbon 2 – Alpecin-Deceuninck Edition",
+    "research": {
+      "group": "shoes",
+      "model": "Vento Infinito Carbon 2 (base model)",
+      "description": "A Microtex race shoe with independent arch and forefoot adjustment. Its full-carbon R2 sole and dual BOA Li2 dials are verified; the Alpecin edition and rider attribution in the original listing are not.",
+      "riders": "Unknown",
+      "connection": "Winner link unverified",
+      "note": "Brand stiffness scales are not directly comparable and are never ranked. Exact team edition is unverified.",
+      "specs": {
+        "weight": {
+          "value": 227,
+          "note": "Manufacturer base-model figure; reference size not stated.",
+          "basis": "single-shoe-reference"
+        },
+        "material": {
+          "value": "Microtex upper; full unidirectional carbon outsole"
+        },
+        "sizes": {
+          "value": "EU 36–48; selected half sizes"
+        },
+        "purpose": {
+          "value": "Road racing"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "closure": {
+          "value": "Dual BOA Li2"
+        },
+        "sole": {
+          "value": "R2 carbon; Fizik stiffness index 10"
+        },
+        "fit": {
+          "value": "Regular; adjustable arch and forefoot"
+        }
+      },
+      "sources": [
+        {
+          "label": "Fizik Vento Infinito Carbon 2",
+          "url": "https://www.fizik.com/en-gb/products/shoes-vento-infinito-carbon-grey_coral-ver2ixr1c7096"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Elite Fly Tour de France Bottle 2024",
+    "research": {
+      "group": "bottles",
+      "model": "Elite Fly Tour de France (550 ml reference)",
+      "description": "An official Tour bottle known for a light, squeezable body and high-flow valve. It carries the race’s visual heritage; that does not prove a particular champion used the 2024 souvenir graphic.",
+      "riders": "Unknown — commemorative graphic",
+      "connection": "Tour-inspired replica",
+      "note": "Current Fly technical reference; exact 2024 graphic SKU unverified. Weight is compared empty; capacities differ.",
+      "specs": {
+        "weight": {
+          "value": 51,
+          "note": "Empty 550 ml base bottle.",
+          "basis": "empty-bottle"
+        },
+        "material": {
+          "value": "BPA-free food-contact plastic"
+        },
+        "sizes": {
+          "value": "550 / 750 ml (model range)"
+        },
+        "purpose": {
+          "value": "Hydration"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "capacity": {
+          "value": 550,
+          "note": "Reference variant shown."
+        },
+        "diameter": {
+          "value": 74
+        },
+        "max_temperature": {
+          "value": 40
+        },
+        "closure": {
+          "value": "High-flow squeeze valve"
+        },
+        "insulation": {
+          "value": "Single wall"
+        }
+      },
+      "sources": [
+        {
+          "label": "Elite Fly Tour de France specifications",
+          "url": "https://www.elite-it.com/en/water-bottles/special-edition/fly-tour-de-france"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "CamelBak Podium Chill – Jumbo-Visma Edition",
+    "research": {
+      "group": "bottles",
+      "model": "Podium Chill 21 oz (base model)",
+      "description": "A double-wall bottle with a self-sealing cap and transport lockout. It prioritises keeping drinks cool; the Jumbo-Visma edition named in the catalogue has not been independently verified.",
+      "riders": "Unknown",
+      "connection": "Winner link unverified",
+      "note": "Base-model specs only. An insulated bottle is heavier by design; capacity is displayed without a universal better/worse ranking.",
+      "specs": {
+        "weight": {
+          "value": 99,
+          "note": "Empty 21 oz base bottle.",
+          "basis": "empty-bottle"
+        },
+        "material": {
+          "value": "Polypropylene-based bottle; silicone valve components"
+        },
+        "sizes": {
+          "value": "21 US fl oz reference"
+        },
+        "purpose": {
+          "value": "Insulated hydration"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "capacity": {
+          "value": 621,
+          "note": "21 US fl oz, rounded to nearest ml."
+        },
+        "closure": {
+          "value": "Self-sealing cap; lockout"
+        },
+        "insulation": {
+          "value": "Double wall"
+        }
+      },
+      "sources": [
+        {
+          "label": "CamelBak Podium Chill 21 oz",
+          "url": "https://www.camelbak.com/product/podium%C2%AE-chill%E2%84%A2-21oz-bike-bottle/CB-1874.html"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Tacx Ciro Bottle Cage – Team DSM-Firmenich",
+    "research": {
+      "group": "cages",
+      "model": "Tacx Ciro (base model)",
+      "description": "A minimalist bottle cage that combines a carbon outer shell with a glass-fibre core. Its 29 g reference weight is verified, while the catalogue’s team-specific attribution remains unknown.",
+      "riders": "Unknown",
+      "connection": "Winner link unverified",
+      "note": "A bottle cage is compared only with other cages, never against filled or empty bottles. Team use unverified.",
+      "specs": {
+        "weight": {
+          "value": 29,
+          "note": "Cage only.",
+          "basis": "bottle-cage"
+        },
+        "material": {
+          "value": "Carbon outer shell; glass-fibre core"
+        },
+        "sizes": {
+          "value": null
+        },
+        "purpose": {
+          "value": "Bottle retention"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        }
+      },
+      "sources": [
+        {
+          "label": "Garmin / Tacx Ciro technical description",
+          "url": "https://www.garmin.com.tw/products/accessories/T6500.19/"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Colnago V4Rs",
+    "research": {
+      "group": "bikes",
+      "model": "Colnago V4Rs (2023 generation)",
+      "description": "Pogačar’s all-round race bike for his 2024 Tour triumph. The V4Rs combined a stiff monocoque chassis with aero refinements, and also carried him through his Giro-winning 2024 season.",
+      "riders": "Tadej Pogačar",
+      "connection": "Tour-winning model",
+      "note": "Complete-bike weight is unknown. Pogačar’s 2020/21 wins were on the V3Rs and are not credited to V4Rs.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": "Monocoque carbon frame and carbon fork"
+        },
+        "sizes": {
+          "value": "420 / 455 / 485 / 510 / 530 / 550 / 570"
+        },
+        "purpose": {
+          "value": "All-round road racing"
+        },
+        "tour_wins": {
+          "value": 1,
+          "note": "2024 · Pogačar. Confirmed men’s overall winning campaign; TT stages used a different model.",
+          "basis": "mens-gc"
+        },
+        "frame_weight": {
+          "value": 798,
+          "note": "Size 485, unpainted frame.",
+          "basis": "reference-frame"
+        },
+        "tyre_clearance": {
+          "value": 30,
+          "note": "Nominal maximum in technical specification; marketing page quotes 32 mm. Neutral because sources differ."
+        },
+        "brakes": {
+          "value": "Disc"
+        },
+        "bottom_bracket": {
+          "value": "T47"
+        },
+        "gearing": {
+          "value": "Build-dependent; exact shop build unknown"
+        }
+      },
+      "sources": [
+        {
+          "label": "Colnago V4Rs specifications",
+          "url": "https://www.colnago.com/en/premium-bikes/v4rs-bike/technical-specifications"
+        },
+        {
+          "label": "Colnago V4Rs development",
+          "url": "https://www.colnago.com/en/premium-bikes/v4rs-bike"
+        },
+        {
+          "label": "2024 winning V4Rs, Colnago photographs",
+          "url": "https://www.bikeradar.com/features/pro-bike/tadej-pogacar-yellow-tour-de-france-winning-colnago-v4rs-tt1-time-trial-bike"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Cervélo R5",
+    "research": {
+      "group": "bikes",
+      "model": "R5 fourth generation (2022–2025)",
+      "description": "The climbing member of Jonas Vingegaard’s Tour-winning fleet. The fourth-generation R5 tackled mountain stages alongside the aero S5 and time-trial P5 in his 2022 and 2023 campaigns.",
+      "riders": "Jonas Vingegaard",
+      "connection": "Tour-winning model",
+      "note": "Figures refer to the archived fourth generation, not the newer R5. No complete-bike weight is assigned to an unspecified build.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": "Carbon frame and fork"
+        },
+        "sizes": {
+          "value": "48 / 51 / 54 / 56 / 58 / 61"
+        },
+        "purpose": {
+          "value": "Climbing / road racing"
+        },
+        "tour_wins": {
+          "value": 2,
+          "note": "2022, 2023 · Vingegaard. R5 was part of a multi-bike winning fleet; not every stage was ridden on it.",
+          "basis": "mens-gc"
+        },
+        "brakes": {
+          "value": "Disc"
+        },
+        "bottom_bracket": {
+          "value": "BBright pressfit"
+        },
+        "gearing": {
+          "value": "Electronic builds; exact shop build unknown"
+        }
+      },
+      "sources": [
+        {
+          "label": "Cervélo archived R5 specifications",
+          "url": "https://www.cervelo.com/en-AU/bikes/my25-r5-ARCHIVE"
+        },
+        {
+          "label": "Cervélo 2023 Grand Tour account",
+          "url": "https://grand-slam.cervelo.com/"
+        },
+        {
+          "label": "2022 winning bike history",
+          "url": "https://www.cyclingweekly.com/news/product-news/tour-de-france-bikes-131646"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "Pinarello DOGMA F DURA ACE Di2",
+    "research": {
+      "group": "bikes",
+      "model": "DOGMA F (2021 generation reference)",
+      "description": "An all-round racing platform associated with Geraint Thomas after his 2018 Tour victory. Its aero shaping and asymmetric carbon construction continue the Dogma line, but older Dogma wins cannot be assigned to this F model.",
+      "riders": "Geraint Thomas",
+      "connection": "Tour winner connection",
+      "note": "Exact model year/build in this catalogue is unconfirmed. Reference specs are explicitly the 2021 generation; weight and model-specific Tour victories remain unknown.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": "Torayca T1100 1K carbon (2021 reference)"
+        },
+        "sizes": {
+          "value": "43 / 46.5 / 50 / 51.5 / 53 / 54 / 55 / 56 / 57.5 / 59.5 / 62"
+        },
+        "purpose": {
+          "value": "All-round road racing"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "gearing": {
+          "value": "Shimano Dura-Ace Di2; exact generation unknown"
+        },
+        "brakes": {
+          "value": "Disc reference; original generation also offered rim"
+        },
+        "bottom_bracket": {
+          "value": "Italian threaded"
+        }
+      },
+      "sources": [
+        {
+          "label": "Pinarello DOGMA F white paper (2021)",
+          "url": "https://pinarello.com/assets/documents/Whitepaper_Dogma-F.pdf"
+        },
+        {
+          "label": "Thomas’s 2022 DOGMA F",
+          "url": "https://www.bikeradar.com/features/pro-bike/geraint-thomass-pinarello-dogma-f-for-the-2022-tour-de-france"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  },
+  {
+    "name": "S-Works Tarmac SL8",
+    "research": {
+      "group": "bikes",
+      "model": "S-Works Tarmac SL8 (2023 launch generation)",
+      "description": "An aero all-rounder developed with riders including Remco Evenepoel and Demi Vollering. Vollering is a Tour de France Femmes champion; this connection is shown separately from the men’s Tour victory metric.",
+      "riders": "Demi Vollering (Tour Femmes champion); Remco Evenepoel",
+      "connection": "Tour Femmes winner connection",
+      "note": "The SL8 launched after the 2023 Tour Femmes. Vollering’s earlier victory is not credited to this model. Complete-bike weight is unknown.",
+      "specs": {
+        "weight": {
+          "value": null
+        },
+        "material": {
+          "value": "FACT 12r carbon frame"
+        },
+        "sizes": {
+          "value": "44 / 49 / 52 / 54 / 56 / 58 / 61"
+        },
+        "purpose": {
+          "value": "All-round road racing"
+        },
+        "tour_wins": {
+          "value": null,
+          "basis": "mens-gc"
+        },
+        "frame_weight": {
+          "value": 685,
+          "note": "Manufacturer reference frame; not a complete bike.",
+          "basis": "reference-frame"
+        },
+        "tyre_clearance": {
+          "value": 32,
+          "note": "Manufacturer maximum."
+        },
+        "brakes": {
+          "value": "Disc"
+        },
+        "gearing": {
+          "value": "Build-dependent; exact shop build unknown"
+        }
+      },
+      "sources": [
+        {
+          "label": "Specialized S-Works SL8 specification and rider development",
+          "url": "https://www.specialized.com/au/en/s-works-tarmac-sl8-sram-red-axs/p/4221554?color=5460153-4221554"
+        },
+        {
+          "label": "Specialized SL8 / Demi Vollering",
+          "url": "https://www.specialized.com/us/en/s-works-tarmac-sl8---sram-red-etap-axs/p/216959?color=349998-216959&searchText=94924-0244"
+        }
+      ],
+      "checked": "2026-09-25"
+    }
+  }
+]
