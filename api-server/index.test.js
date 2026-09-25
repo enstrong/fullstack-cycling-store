@@ -133,7 +133,7 @@ test("unauthenticated mutations and cross-origin requests fail before database w
       throw new Error("Unexpected database access");
     },
   };
-  const base = await serve(createApp(pool, "admin-secret"), t);
+  const base = await serve(createApp(pool), t);
   const client = browser(base);
   for (const [method, url] of [
     ["POST", "/api/products"],
@@ -163,7 +163,7 @@ test("unauthenticated mutations and cross-origin requests fail before database w
 
 test("security headers, malformed requests and sign-in limits", async (t) => {
   const pool = { query: async () => ({ rows: [] }) };
-  const base = await serve(createApp(pool, "admin-secret"), t);
+  const base = await serve(createApp(pool), t);
   const client = browser(base);
   const headers = await client.request("/api/auth/me");
   assert.equal(headers.headers.get("x-content-type-options"), "nosniff");
@@ -233,7 +233,7 @@ test(
     );
     await migrate(pool);
     const base = await serve(
-      createApp(pool, "admin-secret", {
+      createApp(pool, {
         google: {
           clientId: "test-client",
           clientSecret: "test-secret",
@@ -491,7 +491,7 @@ test(
       },
     );
     await t.test(
-      "administrator accounts and service keys can manage products",
+      "only administrator sessions can manage products",
       async () => {
         const product = {
           category_id: 1,
@@ -535,18 +535,7 @@ test(
           "POST",
           headers,
         );
-        assert.equal(serviceProduct.status, 201);
-        assert.equal(
-          (
-            await service.request(
-              `/api/products/${serviceProduct.data.product_id}`,
-              undefined,
-              "DELETE",
-              headers,
-            )
-          ).status,
-          200,
-        );
+        assert.equal(serviceProduct.status, 401);
       },
     );
     await t.test(

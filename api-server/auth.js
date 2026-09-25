@@ -9,6 +9,7 @@ const { promisify } = require("node:util");
 const derive = promisify(scrypt);
 const token = () => randomBytes(32).toString("base64url");
 const digest = (value) => createHash("sha256").update(value).digest("hex");
+const adminEmail = "admin@fullstack-cycling-store.invalid";
 const fail = (status, message) => Object.assign(new Error(message), { status });
 const publicUser = (user) => ({
   user_id: user.user_id,
@@ -128,14 +129,15 @@ async function establishSession(client, req, res, user) {
     ]);
   await client.query("DELETE FROM auth_sessions WHERE expires_at <= NOW()");
   const session = token();
+  const maxAge = (user.role === "admin" ? 8 : 24 * 7) * 60 * 60 * 1000;
   await client.query(
-    "INSERT INTO auth_sessions(token_hash,user_id,expires_at) VALUES($1,$2,NOW()+INTERVAL '7 days')",
-    [digest(session), user.user_id],
+    "INSERT INTO auth_sessions(token_hash,user_id,expires_at) VALUES($1,$2,NOW()+$3*INTERVAL '1 hour')",
+    [digest(session), user.user_id, maxAge / (60 * 60 * 1000)],
   );
-  return session;
+  return { token: session, maxAge };
 }
 function sendSession(res, session) {
-  setCookie(res, "auth_session", session, 7 * 86400000);
+  setCookie(res, "auth_session", session.token, session.maxAge);
   res.clearCookie("guest_cart", cookieOptions());
 }
 function registerAuth(app, pool, options) {
@@ -153,6 +155,16 @@ function registerAuth(app, pool, options) {
     legacyHeaders: false,
     message: {
       message: "Too many sign-in attempts. Please try again in 15 minutes.",
+    },
+  });
+  const adminRateLimit = createRateLimit({
+    windowMs: 15 * 60000,
+    limit: 5,
+    standardHeaders: "draft-8",
+    legacyHeaders: false,
+    message: {
+      message:
+        "Too many administrator sign-in attempts. Try again in 15 minutes.",
     },
   });
   app.use(async (req, res, next) => {
@@ -198,6 +210,8 @@ function registerAuth(app, pool, options) {
         400,
         "Enter a name, valid email, and a password between 10 and 128 characters.",
       );
+    if (email === adminEmail)
+      throw fail(400, "That email address is reserved.");
     const passwordHash = await hashPassword(password);
     try {
       const result = await transaction(pool, async (client) => {
@@ -219,32 +233,47 @@ function registerAuth(app, pool, options) {
       throw error;
     }
   });
-  app.post("/api/auth/login", rateLimit, async (req, res) => {
-    const email =
-      typeof req.body?.email === "string"
-        ? req.body.email.trim().toLowerCase()
-        : "";
-    const password = req.body?.password;
-    if (
-      !email ||
-      email.length > 254 ||
-      typeof password !== "string" ||
-      !password.length ||
-      password.length > 128
-    )
-      throw fail(400, "Enter your email and password.");
-    const found = await pool.query("SELECT * FROM users WHERE email=$1", [
-      email,
-    ]);
-    const user = found.rows[0];
-    if (!(await verifyPassword(password, user?.password_hash)))
-      throw fail(401, "Email or password is incorrect.");
-    const session = await transaction(pool, (client) =>
-      establishSession(client, req, res, user),
-    );
-    sendSession(res, session);
-    res.json({ user: publicUser(user) });
-  });
+  app.post(
+    "/api/auth/login",
+    (req, res, next) => {
+      const identifier =
+        typeof req.body?.email === "string"
+          ? req.body.email.trim().toLowerCase()
+          : "";
+      (identifier === "admin" || identifier === adminEmail
+        ? adminRateLimit
+        : rateLimit)(req, res, next);
+    },
+    async (req, res) => {
+      const email =
+        typeof req.body?.email === "string"
+          ? req.body.email.trim().toLowerCase()
+          : "";
+      const isAdmin = email === "admin" || email === adminEmail;
+      const accountEmail = email === "admin" ? adminEmail : email;
+      const password = req.body?.password;
+      if (
+        !email ||
+        email.length > 254 ||
+        typeof password !== "string" ||
+        !password.length ||
+        password.length > 128
+      )
+        throw fail(400, "Enter your email and password.");
+      const found = await pool.query(
+        `SELECT * FROM users WHERE email=$1 AND ($2::boolean = false OR role='admin')`,
+        [accountEmail, isAdmin],
+      );
+      const user = found.rows[0];
+      if (!(await verifyPassword(password, user?.password_hash)))
+        throw fail(401, "Email or password is incorrect.");
+      const session = await transaction(pool, (client) =>
+        establishSession(client, req, res, user),
+      );
+      sendSession(res, session);
+      res.json({ user: publicUser(user) });
+    },
+  );
   app.post("/api/auth/logout", async (req, res) => {
     const session = cookies(req).auth_session;
     if (session)

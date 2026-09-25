@@ -5,7 +5,8 @@
   "scripts": {
     "test": "node --test",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "admin:create": "node scripts/provision-admin.js"
   },
   "keywords": [],
   "author": "",

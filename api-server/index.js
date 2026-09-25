@@ -2,17 +2,25 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const { rateLimit } = require("express-rate-limit");
-const { timingSafeEqual } = require("node:crypto");
 const path = require("node:path");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 const { createPool, migrate } = require("./database");
-const { registerAuth, transaction, cartFor, fail, digest } = require("./auth");
+const { registerAuth, transaction, cartFor, fail } = require("./auth");
 
-function createApp(pool, adminApiKey = process.env.ADMIN_API_KEY, config = {}) {
+function createApp(pool, config = {}) {
   const app = express();
+  const proxyHops = Number(process.env.TRUST_PROXY_HOPS || 0);
+  if (!Number.isInteger(proxyHops) || proxyHops < 0 || proxyHops > 5)
+    throw new Error("TRUST_PROXY_HOPS must be an integer from 0 to 5.");
+  app.set("trust proxy", proxyHops);
   const frontendUrl =
     config.frontendUrl || process.env.FRONTEND_URL || "http://localhost:5173";
   const origins = new Set([new URL(frontendUrl).origin]);
+  if (
+    process.env.NODE_ENV === "production" &&
+    new URL(frontendUrl).protocol !== "https:"
+  )
+    throw new Error("FRONTEND_URL must use HTTPS in production.");
   app.disable("x-powered-by");
   app.use(
     helmet({
@@ -59,13 +67,20 @@ function createApp(pool, adminApiKey = process.env.ADMIN_API_KEY, config = {}) {
     }
     next();
   });
+  const google = config.google || {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    redirectUri: process.env.GOOGLE_REDIRECT_URI,
+  };
+  if (
+    process.env.NODE_ENV === "production" &&
+    google.redirectUri &&
+    new URL(google.redirectUri).protocol !== "https:"
+  )
+    throw new Error("GOOGLE_REDIRECT_URI must use HTTPS in production.");
   registerAuth(app, pool, {
     frontendUrl,
-    google: config.google || {
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      redirectUri: process.env.GOOGLE_REDIRECT_URI,
-    },
+    google,
   });
   function requireLogin(req, res, next) {
     if (!req.user)
@@ -76,16 +91,6 @@ function createApp(pool, adminApiKey = process.env.ADMIN_API_KEY, config = {}) {
   }
   function requireAdmin(req, res, next) {
     if (req.user?.role === "admin") return next();
-    const supplied = /^Bearer (\S+)$/.exec(req.get("Authorization") || "")?.[1];
-    if (
-      adminApiKey &&
-      supplied &&
-      timingSafeEqual(
-        Buffer.from(digest(supplied)),
-        Buffer.from(digest(adminApiKey)),
-      )
-    )
-      return next();
     res
       .status(req.user ? 403 : 401)
       .json({ message: "Administrator access required." });
@@ -383,7 +388,10 @@ if (require.main === module) {
   migrate(pool)
     .then(() => {
       const port = process.env.PORT || 5001;
-      const server = createApp(pool).listen(port, "127.0.0.1", () =>
+      const host =
+        process.env.HOST ||
+        (process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1");
+      const server = createApp(pool).listen(port, host, () =>
         console.log(`API running at http://localhost:${port}`),
       );
       server.requestTimeout = 30000;
@@ -400,12 +408,12 @@ if (require.main === module) {
         });
       }
       server.on("error", (error) => {
-        console.error(error);
+        console.error("HTTP server failed:", error.code || "server_error");
         process.exit(1);
       });
     })
     .catch((error) => {
-      console.error("Database setup failed:", error);
+      console.error("Database setup failed:", error.code || "startup_error");
       process.exit(1);
     });
 }

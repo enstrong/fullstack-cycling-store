@@ -159,3 +159,48 @@
 .admin-action-btn.delete:hover {
   background-color: #c82333;
 }
+.admin-login-page {
+  min-height: 72vh;
+  display: grid;
+  place-items: center;
+  padding: 8rem 1.25rem 4rem;
+}
+
+.admin-login-panel {
+  width: min(100%, 440px);
+  padding: clamp(1.5rem, 5vw, 3rem);
+  background: #171d12;
+  border: 1px solid #343d2b;
+}
+
+.admin-login-panel h1 {
+  margin: 0.8rem 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.admin-login-panel > p {
+  margin-bottom: 2rem;
+}
+
+.admin-login-panel .account-form {
+  gap: 1.1rem;
+}
+
+.admin-login-panel input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.75rem;
+  color: #f1f0e9;
+  background: #0d110b;
+  border: 1px solid #566047;
+}
+
+.admin-login-panel input:focus-visible {
+  outline: 2px solid #e9c94b;
+  outline-offset: 2px;
+}
+
+.admin-login-panel .account-back {
+  display: inline-block;
+  margin-top: 1.5rem;
+}

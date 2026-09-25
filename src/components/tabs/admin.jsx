@@ -1,16 +1,19 @@
-import { Navigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/auth";
 import { useState, useEffect } from "react";
 import "@/css/App.css";
 import "@/css/tabs/teams.css";
 import "@/css/tabs/admin.css";
-
-import { API_BASE } from "@/api";
+import "@/css/tabs/account.css";
+import { api, API_BASE } from "@/api";
 
 export default function Admin() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
+  const [loginError, setLoginError] = useState("");
+  const [loginBusy, setLoginBusy] = useState(false);
+  const [loginAttempt, setLoginAttempt] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [formData, setFormData] = useState({
     category_id: "",
@@ -163,19 +166,89 @@ export default function Admin() {
     setMode("edit");
   };
 
-  if (!user) return <Navigate to="/account" replace />;
-  if (user.role !== "admin")
+  async function signInAdmin(event) {
+    event.preventDefault();
+    setLoginBusy(true);
+    setLoginError("");
+    const form = new FormData(event.currentTarget);
+    const username = String(form.get("username") || "").trim();
+    if (username.toLowerCase() !== "admin") {
+      setLoginError("Administrator sign-in was denied.");
+      setLoginBusy(false);
+      setLoginAttempt((attempt) => attempt + 1);
+      return;
+    }
+    try {
+      const data = await api("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: username,
+          password: form.get("password"),
+        }),
+      });
+      if (data.user.role !== "admin") {
+        setLoginError("Administrator sign-in was denied.");
+        setLoginAttempt((attempt) => attempt + 1);
+        return;
+      }
+      setUser(data.user);
+    } catch (error) {
+      setLoginError(error.message);
+      setLoginAttempt((attempt) => attempt + 1);
+    } finally {
+      setLoginBusy(false);
+    }
+  }
+
+  if (!user || user.role !== "admin")
     return (
-      <main className="page-shell">
-        <div className="container empty-state">
-          <h1>Administrator access required.</h1>
-          <Link className="primary-button" to="/gear">
-            Back to the shop →
+      <main className="page-shell admin-login-page">
+        <section className="admin-login-panel">
+          <span className="eyebrow">RESTRICTED AREA</span>
+          <h1>Administrator sign in</h1>
+          <p className="muted">
+            Sign in with the private administrator account to manage products.
+          </p>
+          <form className="account-form" onSubmit={signInAdmin}>
+            <label>
+              Username
+              <input
+                key={`username-${loginAttempt}`}
+                name="username"
+                autoComplete="username"
+                maxLength="254"
+                required
+                autoCapitalize="none"
+                spellCheck="false"
+                placeholder="admin"
+              />
+            </label>
+            <label>
+              Password
+              <input
+                key={`password-${loginAttempt}`}
+                type="password"
+                name="password"
+                autoComplete="current-password"
+                maxLength="128"
+                required
+              />
+            </label>
+            {loginError && (
+              <p className="inline-error" role="alert">
+                {loginError}
+              </p>
+            )}
+            <button className="primary-button" disabled={loginBusy}>
+              {loginBusy ? "Signing in…" : "Sign in →"}
+            </button>
+          </form>
+          <Link to="/" className="account-back">
+            ← Back to the shop
           </Link>
-        </div>
+        </section>
       </main>
     );
-
   return (
     <>
       <div className="section admin-section d-flex align-center">
