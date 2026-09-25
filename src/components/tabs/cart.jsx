@@ -1,247 +1,190 @@
-import '@/css/App.css';
-import '@/css/tabs/cart.css';
-import React, { useEffect, useState } from 'react';
-
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { api, money } from "@/api";
+import { useAuth } from "@/auth";
+import "@/css/tabs/cart.css";
 export default function Cart() {
-  const [cartItems, setCartItems] = useState([]);
+  const { user } = useAuth();
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [total, setTotal] = useState(0);
-  const [notification, setNotification] = useState(null);
-
-  const sessionId = localStorage.getItem('session_id') || (() => {
-    const newId = crypto.randomUUID();
-    localStorage.setItem('session_id', newId);
-    return newId;
-  })();
-
-  const fetchCart = () => {
-    setLoading(true);
-    fetch(`http://localhost:5000/api/cart?session_id=${sessionId}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed to fetch cart');
-        }
-        return res.json();
-      })
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    let live = true;
+    api("/cart")
       .then((data) => {
-        setCartItems(data.items || []);
-        if (data.items && data.items.length > 0) {
-          const cartTotal = data.items.reduce(
-            (sum, item) => sum + item.price * item.quantity, 0
-          );
-          setTotal(cartTotal);
-        } else {
-          setTotal(0);
-        }
+        if (live) setItems(data.items);
       })
       .catch((err) => {
-        console.error('Error loading cart:', err);
-        setCartItems([]);
-        showNotification('error', 'Failed to load cart');
+        if (live) setError(err.message);
       })
       .finally(() => {
-        setLoading(false);
+        if (live) setLoading(false);
       });
-  };
-
-  useEffect(() => {
-    fetchCart();
-  }, []);
-
-  const handleCheckout = () => {
-    window.location.href = '/cart/checkout';
-  };
-
-  const handleClearCart = () => {
-    if (cartItems.length === 0) return;
-    
-    setLoading(true);
-    const deletePromises = cartItems.map(item => 
-      fetch(`http://localhost:5000/api/cart/item/${item.cart_item_id}?session_id=${sessionId}`, {
-        method: 'DELETE',
-      }).then(res => {
-        if (!res.ok) throw new Error(`Failed to remove item ${item.cart_item_id}`);
-        return res.json();
-      })
-    );
-
-    Promise.all(deletePromises)
-      .then(() => {
-        setCartItems([]);
-        setTotal(0);
-        showNotification('success', 'Cart cleared successfully');
-      })
-      .catch(err => {
-        console.error('Error clearing cart:', err);
-        showNotification('error', 'Failed to clear cart');
-      })
-      .finally(() => {
-        setLoading(false);
+    return () => {
+      live = false;
+    };
+  }, [user]);
+  async function change(path, method, body) {
+    setBusy(true);
+    setError("");
+    try {
+      const data = await api(path, {
+        method,
+        ...(body ? { body: JSON.stringify(body) } : {}),
       });
-  };
-
-  const handleRemoveItem = (cartItemId) => {
-    fetch(`http://localhost:5000/api/cart/item/${cartItemId}?session_id=${sessionId}`, {
-      method: 'DELETE',
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to remove item');
-        return res.json();
-      })
-      .then(data => {
-        setCartItems(data.items || []);
-        if (data.items && data.items.length > 0) {
-          const cartTotal = data.items.reduce(
-            (sum, item) => sum + item.price * item.quantity, 0
-          );
-          setTotal(cartTotal);
-        } else {
-          setTotal(0);
-        }
-        showNotification('success', 'Item removed from cart');
-      })
-      .catch(err => {
-        console.error('Error removing item:', err);
-        showNotification('error', 'Failed to remove item');
-      });
-  };
-
-  const handleUpdateQuantity = (productId, currentQuantity, change) => {
-    const newQuantity = currentQuantity + change;
-    
-    if (newQuantity <= 0) {
-      // if quantity becomes 0 or less, remove the item cuz there is none lol
-      const itemToRemove = cartItems.find(item => item.product_id === productId);
-      if (itemToRemove) {
-        handleRemoveItem(itemToRemove.cart_item_id);
-      }
-      return;
+      setItems(data.items);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
     }
-
-    // or update the quantity
-    fetch('http://localhost:5000/api/cart/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        session_id: sessionId,
-        product_id: productId,
-        quantity: change // send the change (can be positive or negative)
-      }),
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to update quantity');
-        return res.json();
-      })
-      .then(data => {
-        setCartItems(data.items || []);
-        if (data.items && data.items.length > 0) {
-          const cartTotal = data.items.reduce(
-            (sum, item) => sum + item.price * item.quantity, 0
-          );
-          setTotal(cartTotal);
-        }
-        showNotification('success', 'Cart updated');
-      })
-      .catch(err => {
-        console.error('Error updating quantity:', err);
-        showNotification('error', 'Failed to update quantity');
-      });
-  };
-
-  const showNotification = (type, message) => {
-    setNotification({ type, message });
-    setTimeout(() => {
-      setNotification(null);
-    }, 3000);
-  };
-
-  if (loading) return (
-    <div className="section cart-section">
-      <div className="container">
-        <div className="cart-container">
-          <div className="loading">Loading your cart...</div>
-        </div>
-      </div>
-    </div>
-  );
-
+  }
+  const total = items.reduce((sum, i) => sum + Number(i.price) * i.quantity, 0);
   return (
-    <div className="section cart-section">
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          {notification.message}
-        </div>
-      )}
-      
+    <main className="page-shell cart-page">
       <div className="container">
-        <div className="cart-container">
-          <h1>Your Cart</h1>
-          
-          {cartItems.length === 0 ? (
-            <div className="cart-empty">
-              <p>Your cart is empty.</p>
-            </div>
-          ) : (
-            <>
-              <ul className="cart-items">
-                {cartItems.map((item) => (
-                  <li key={item.cart_item_id} className="cart-item">
-                    <div className="cart-item-image">
-                      {item.icon && <img src={item.icon} alt={item.name} />}
+        <div className="page-heading">
+          <div>
+            <span className="eyebrow">READY FOR THE NEXT RIDE</span>
+            <h1>
+              Your cart<span className="count-badge">{items.length}</span>
+            </h1>
+          </div>
+          <Link className="text-link" to="/gear">
+            Continue shopping ↗
+          </Link>
+        </div>
+        {error && (
+          <p className="inline-error" role="alert">
+            {error}
+          </p>
+        )}
+        {loading ? (
+          <div className="page-status" role="status">
+            Loading your kit…
+          </div>
+        ) : !items.length ? (
+          <div className="empty-state">
+            <span className="empty-mark">↗</span>
+            <h2>Your next ride starts here.</h2>
+            <p className="muted">
+              Find the bike and gear that make you want to get out there.
+            </p>
+            <Link className="primary-button" to="/gear">
+              Explore the collection →
+            </Link>
+          </div>
+        ) : (
+          <div className="cart-layout">
+            <section aria-label="Cart items">
+              <div className="cart-list">
+                {items.map((item) => (
+                  <article className="cart-line" key={item.cart_item_id}>
+                    <div className="cart-photo">
+                      <img src={item.icon} alt={item.name} />
                     </div>
-                    <div className="cart-item-details">
-                      <div className="cart-item-name">{item.name}</div>
-                      <div className="cart-item-price">
-                        ${parseFloat(item.price).toFixed(2)}
+                    <div className="cart-line-info">
+                      <h2>{item.name}</h2>
+                      <p className="muted">{money(item.price)} each</p>
+                      <div className="quantity-controls">
+                        <button
+                          disabled={busy}
+                          aria-label={`Decrease quantity of ${item.name}`}
+                          onClick={() =>
+                            item.quantity === 1
+                              ? change(
+                                  `/cart/item/${item.cart_item_id}`,
+                                  "DELETE",
+                                )
+                              : change("/cart/add", "POST", {
+                                  product_id: item.product_id,
+                                  quantity: -1,
+                                })
+                          }
+                        >
+                          −
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          disabled={
+                            busy || item.quantity >= item.stock_quantity
+                          }
+                          aria-label={`Increase quantity of ${item.name}`}
+                          onClick={() =>
+                            change("/cart/add", "POST", {
+                              product_id: item.product_id,
+                              quantity: 1,
+                            })
+                          }
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
-                    <div className="cart-item-quantity-controls">
-                      <button 
-                        onClick={() => handleUpdateQuantity(item.product_id, item.quantity, -1)}
-                        className="quantity-btn"
+                    <div className="cart-line-end">
+                      <strong>
+                        {money(Number(item.price) * item.quantity)}
+                      </strong>
+                      <button
+                        className="text-button"
+                        disabled={busy}
+                        onClick={() =>
+                          change(`/cart/item/${item.cart_item_id}`, "DELETE")
+                        }
                       >
-                        -
-                      </button>
-                      <span className="cart-item-quantity">{item.quantity}</span>
-                      <button 
-                        onClick={() => handleUpdateQuantity(item.product_id, item.quantity, 1)}
-                        className="quantity-btn"
-                      >
-                        +
+                        Remove
                       </button>
                     </div>
-                    <div className="cart-item-total">
-                      ${(item.price * item.quantity).toFixed(2)}
-                    </div>
-                    <button 
-                      onClick={() => handleRemoveItem(item.cart_item_id)}
-                      className="remove-item-btn"
-                    >
-                      ×
-                    </button>
-                  </li>
+                  </article>
                 ))}
-              </ul>
-              
-              <div className="cart-actions">
-                <div className="cart-total">
-                  Total: <span>${total.toFixed(2)}</span>
-                </div>
-                <div className="cart-buttons">
-                  <button onClick={handleClearCart} className="cart-button secondary">
-                    Clear Cart
-                  </button>
-                  <button onClick={handleCheckout} className="cart-button primary">
-                    Checkout
-                  </button>
-                </div>
               </div>
-            </>
-          )}
-        </div>
+              <button
+                className="text-button clear-cart"
+                disabled={busy}
+                onClick={() => change("/cart/clear", "POST", {})}
+              >
+                Clear cart
+              </button>
+            </section>
+            <aside className="order-summary">
+              <span className="eyebrow">THE DETAILS</span>
+              <h2>Order summary</h2>
+              <div className="summary-row">
+                <span>Subtotal</span>
+                <span>{money(total)}</span>
+              </div>
+              <div className="summary-row">
+                <span>Shipping</span>
+                <span>Complimentary</span>
+              </div>
+              <div className="summary-total">
+                <span>Total</span>
+                <strong>{money(total)}</strong>
+              </div>
+              {!user && (
+                <div className="guest-note">
+                  <strong>Make it yours.</strong>
+                  <p>
+                    Sign in or create an account to place your order. We’ll keep
+                    everything in your cart.
+                  </p>
+                </div>
+              )}
+              <Link
+                className={`primary-button ${busy ? "disabled" : ""}`}
+                to={user ? "/cart/checkout" : "/account?next=/cart/checkout"}
+              >
+                {user ? "Continue to checkout" : "Sign in to checkout"}{" "}
+                <span>→</span>
+              </Link>
+              <p className="auth-note">
+                Prices and availability are confirmed at checkout.
+              </p>
+            </aside>
+          </div>
+        )}
       </div>
-    </div>
+    </main>
   );
 }

@@ -94,3 +94,16 @@
   font-size: 22px;
   font-style: italic;
 }
+
+.buy-now .bikes-section__button {
+  border-radius: 3px;
+  border-width: 1px;
+  padding: 16px 26px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+.buy-now .bikes-section__button:hover {
+  color: #101110;
+}

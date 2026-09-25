@@ -9,7 +9,9 @@
 .teams-section__logo {
   height: 150px;
   display: inline-block;
-  transition: transform .3s ease-in-out, .3s ease-in-out;
+  transition:
+    transform 0.3s ease-in-out,
+    0.3s ease-in-out;
 }
 
 .teams-section__logo:hover {
@@ -18,43 +20,40 @@
 }
 
 .uaeteam {
-  background: linear-gradient(
-    rgba(0, 0, 0, 0.5), 
-    rgba(0, 0, 0, 0.5)
-  ), url(/bg/Team_UAE.jpg) no-repeat;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(/bg/Team_UAE.jpg) no-repeat;
   background-size: cover;
   background-position: center 50%;
 }
 
 .teamvisma {
-  background: linear-gradient(
-    rgba(0, 0, 0, 0.5), 
-    rgba(0, 0, 0, 0.5)
-  ), url(/bg/Team_Visma.jpg) no-repeat;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(/bg/Team_Visma.jpg) no-repeat;
   background-size: cover;
   background-position: center 50%;
 }
 
-.uaeteam-text, .teamvisma-text {
+.uaeteam-text,
+.teamvisma-text {
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 15px;
 }
 
 .teamsky {
-  background: linear-gradient(
-    rgba(0, 0, 0, 0.5), 
-    rgba(0, 0, 0, 0.5)
-  ), url(/bg/Team_Sky.jpg) no-repeat;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(/bg/Team_Sky.jpg) no-repeat;
   background-size: cover;
   background-position: center 10%;
 }
 
 .astana {
-  background: linear-gradient(
-    rgba(0, 0, 0, 0.5), 
-    rgba(0, 0, 0, 0.5)
-  ), url(/bg/Astana_TdF2014.jpg) no-repeat;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(/bg/Astana_TdF2014.jpg) no-repeat;
   background-size: cover;
   background-position: center 50%;
 }
@@ -93,4 +92,105 @@
   margin-bottom: 10px;
   position: relative;
   padding-left: 20px;
+}
+.teams-section__group-logos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 35px;
+  max-width: 1100px;
+  width: 100%;
+  padding-block: 140px 70px;
+}
+.teams-section__group-logos > div {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.teams-section__logo {
+  width: 100%;
+  max-width: 190px;
+  height: 130px;
+  object-fit: contain;
+}
+.uaeteam,
+.teamvisma,
+.teamsky,
+.astana {
+  padding: 130px 0 70px;
+  min-height: 90vh;
+  scroll-margin-top: 0;
+}
+.uaeteam-title,
+.teamvisma-title {
+  font-size: clamp(30px, 5vw, 62px);
+  text-align: center;
+  line-height: 1.12;
+  letter-spacing: -1.6px;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+.team-info {
+  width: 100%;
+  min-width: 0;
+}
+.team-achievements {
+  padding: 28px;
+  border: 1px solid #ffffff24;
+  background: #111b11a6;
+}
+.team-achievements li {
+  padding-left: 0;
+  line-height: 1.65;
+}
+.team-achievements h3 {
+  font-size: 18px;
+}
+.team-info p {
+  max-width: 680px;
+  margin-inline: auto;
+}
+@media (max-width: 700px) {
+  .teams-section {
+    min-height: 65vh;
+  }
+  .teams-section__group-logos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px;
+    padding-top: 135px;
+    padding-bottom: 55px;
+  }
+  .teams-section__logo {
+    max-width: 145px;
+    height: 105px;
+  }
+  .teams-section__logo:hover {
+    transform: scale(1.05);
+  }
+  .uaeteam,
+  .teamvisma,
+  .teamsky,
+  .astana {
+    padding: 115px 0 60px;
+    min-height: 85vh;
+  }
+  .team-info {
+    padding: 0;
+    margin-top: 24px;
+  }
+  .team-achievements {
+    padding: 22px 18px;
+  }
+  .team-achievements li {
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+  .uaeteam-text,
+  .teamvisma-text {
+    font-size: 15px;
+  }
+  .uaeteam-title,
+  .teamvisma-title {
+    letter-spacing: -0.8px;
+  }
 }

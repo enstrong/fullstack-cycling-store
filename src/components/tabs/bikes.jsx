@@ -3,6 +3,8 @@ import '@/css/tabs/bikes.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { api, API_BASE } from '@/api';
+
 export default function Bikes() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -12,7 +14,7 @@ export default function Bikes() {
   useEffect(() => {
     const fetchBikes = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/products');
+        const response = await fetch(`${API_BASE}/api/products`);
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
@@ -49,28 +51,8 @@ export default function Bikes() {
         return;
       }
       
-      let sessionId = localStorage.getItem('session_id');
-      if (!sessionId) {
-        sessionId = crypto.randomUUID();
-        localStorage.setItem('session_id', sessionId);
-      }
-      
-      const response = await fetch('http://localhost:5000/api/cart/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          session_id: sessionId,
-          product_id: bikeProduct.product_id,
-          quantity: 1
-        }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to add bike to cart');
-      }
-      
+      await api('/cart/add', { method: 'POST', body: JSON.stringify({ product_id: bikeProduct.product_id, quantity: 1 }) });
+
       setNotification({
         show: true,
         message: `${bikeProduct.name} added to cart!`,

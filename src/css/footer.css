@@ -1,32 +1,101 @@
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 50; 
+.site-footer {
+  background: #0b0d09;
+  border-top: 1px solid #31362b;
+  color: #b4bba7;
+  padding: 55px 0 24px;
 }
-
-.our-social-networks {
+.footer-main {
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+  padding-bottom: 55px;
+}
+.footer-brand > a {
+  font-size: 23px;
+  letter-spacing: -1px;
   font-weight: 700;
-  text-align: center;
-  font-size: 20px;
-  padding: 10px 0px;
-}
-
-.social-networks-img {
+  color: #eceee5;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 3px;
 }
-
-.link {
-  max-height: 30px;
-  margin: 20px 5px;
+.footer-brand > a > span:first-child {
+  font-weight: 400;
+  color: #8b967c;
 }
-
-.made-by {
-  font-weight: 700;
-  text-align: center;
-  padding-bottom: 18px;
+.footer-arrow {
+  color: #e9c94b;
+  font-size: 28px;
+  margin-left: 12px;
+}
+.footer-brand > p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #818d73;
+  margin-top: 22px;
+}
+.footer-nav {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 65px;
+}
+.footer-nav > div {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.footer-nav > div > span {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #717f61;
+  margin-bottom: 8px;
+}
+.footer-nav a {
+  font-size: 12px;
+  color: #b5bfaa;
+}
+.footer-nav a:hover {
+  color: #e9c94b;
+}
+.footer-bottom {
+  border-top: 1px solid #283020;
+  padding-top: 23px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  color: #6f7c5f;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+.footer-bottom a {
+  color: #aab799;
+}
+@media (max-width: 960px) {
+  .footer-main {
+    gap: 35px;
+  }
+  .footer-nav {
+    gap: 30px;
+  }
+}
+@media (max-width: 700px) {
+  .site-footer {
+    padding-top: 40px;
+  }
+  .footer-main {
+    flex-direction: column;
+    gap: 35px;
+    padding-bottom: 35px;
+  }
+  .footer-nav {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+  .footer-bottom {
+    flex-wrap: wrap;
+    font-size: 8px;
+  }
+  .footer-bottom > span:last-child {
+    display: none;
+  }
 }

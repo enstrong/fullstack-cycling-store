@@ -1,363 +1,412 @@
-const express = require('express');
-const { Pool } = require('pg');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const { rateLimit } = require("express-rate-limit");
+const { timingSafeEqual } = require("node:crypto");
+const path = require("node:path");
+require("dotenv").config({ path: path.join(__dirname, ".env") });
+const { createPool, migrate } = require("./database");
+const { registerAuth, transaction, cartFor, fail, digest } = require("./auth");
 
-const app = express();
-const port = process.env.PORT;
-
-app.use(cors());
-app.use(express.json());
-
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT
-});
-
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
-    console.error('Database connection error:', err);
-  } else {
-    console.log('Database connected:', res.rows[0].now);
-  }
-});
-
-// fetch categories
-app.get('/api/categories', (req, res) => {
-  pool.query('SELECT * FROM categories')
-    .then(result => res.json(result.rows))  
-    .catch(err => {
-      console.error('Error fetching categories:', err.stack || err);
-      res.status(500).json({ error: err.message });
-    });
-});
-
-// fetch products
-app.get('/api/products', (req, res) => {
-  pool.query('SELECT p.*, c.section FROM products p JOIN categories c ON p.category_id = c.category_id')
-    .then(result => res.json(result.rows))
-    .catch(err => {
-      console.error('Error fetching products:', err.stack || err);
-      res.status(500).json({ error: err.message });
-    });
-});
-
-// create a new product
-app.post('/api/products', (req, res) => {
-  const { category_id, name, description, price, icon, stock_quantity } = req.body;
-  
-  pool.query(
-    'INSERT INTO products (category_id, name, description, price, icon, stock_quantity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-    [category_id, name, description, price, icon, stock_quantity]
-  )
-    .then(result => res.status(201).json(result.rows[0]))
-    .catch(err => {
-      console.error('Error creating product:', err.stack || err);
-      res.status(500).json({ error: err.message });
-    });
-});
-
-// update a product
-app.put('/api/products/:id', (req, res) => {
-  const { id } = req.params;
-  const { category_id, name, description, price, icon, stock_quantity } = req.body;
-  
-  pool.query(
-    'UPDATE products SET category_id = $1, name = $2, description = $3, price = $4, icon = $5, stock_quantity = $6 WHERE product_id = $7 RETURNING *',
-    [category_id, name, description, price, icon, stock_quantity, id]
-  )
-    .then(result => {
-      if (result.rows.length === 0) {
-        return res.status(404).json({ error: 'Product not found' });
-      }
-      res.json(result.rows[0]);
-    })
-    .catch(err => {
-      console.error('Error updating product:', err.stack || err);
-      res.status(500).json({ error: err.message });
-    });
-});
-
-// delete a product
-app.delete('/api/products/:id', (req, res) => {
-  const { id } = req.params;
-  
-  pool.query('DELETE FROM products WHERE product_id = $1 RETURNING *', [id])
-    .then(result => {
-      if (result.rows.length === 0) {
-        return res.status(404).json({ error: 'Product not found' });
-      }
-      res.json({ message: 'Product deleted successfully', product: result.rows[0] });
-    })
-    .catch(err => {
-      console.error('Error deleting product:', err.stack || err);
-      res.status(500).json({ error: err.message });
-    });
-});
-
-// get or create cart
-app.get('/api/cart', async (req, res) => {
-  const sessionId = req.query.session_id;
-
-  if (!sessionId) {
-    return res.status(400).json({ error: 'Missing session_id' });
-  }
-
-  try {
-    let cartResult = await pool.query('SELECT * FROM cart WHERE session_id = $1', [sessionId]);
-
-    if (cartResult.rows.length === 0) {
-      const newCart = await pool.query('INSERT INTO cart (session_id) VALUES ($1) RETURNING *', [sessionId]);
-      cartResult = newCart;
+function createApp(pool, adminApiKey = process.env.ADMIN_API_KEY, config = {}) {
+  const app = express();
+  const frontendUrl =
+    config.frontendUrl || process.env.FRONTEND_URL || "http://localhost:5173";
+  const origins = new Set([new URL(frontendUrl).origin]);
+  app.disable("x-powered-by");
+  app.use(
+    helmet({
+      strictTransportSecurity:
+        process.env.NODE_ENV === "production" ? undefined : false,
+    }),
+  );
+  app.use(
+    "/api",
+    rateLimit({
+      windowMs: 60000,
+      limit: 180,
+      standardHeaders: "draft-8",
+      legacyHeaders: false,
+      message: {
+        message: "Too many requests. Please wait a minute and try again.",
+      },
+    }),
+  );
+  app.param("id", (req, res, next, id) => {
+    if (!/^[1-9]\d{0,9}$/.test(id) || Number(id) > 2147483647)
+      return next(fail(400, "Invalid item ID."));
+    next();
+  });
+  app.use(
+    cors({
+      origin: (origin, cb) => cb(null, !origin || origins.has(origin)),
+      credentials: true,
+    }),
+  );
+  app.use(express.json({ limit: "32kb" }));
+  app.use((req, res, next) => {
+    res.set("Cache-Control", "no-store");
+    if (!["GET", "HEAD", "OPTIONS"].includes(req.method)) {
+      if (
+        (req.headers.origin && !origins.has(req.headers.origin)) ||
+        req.headers["sec-fetch-site"] === "cross-site"
+      )
+        return res
+          .status(403)
+          .json({ message: "Request origin is not allowed." });
+      if (req.method !== "DELETE" && !req.is("application/json"))
+        return res.status(415).json({ message: "Use application/json." });
     }
-
-    const cartId = cartResult.rows[0].cart_id;
-
-    const itemsResult = await pool.query(
-      `SELECT ci.cart_item_id, ci.product_id, ci.quantity, p.name, p.price, p.icon
-       FROM cart_items ci
-       JOIN products p ON ci.product_id = p.product_id
-       WHERE ci.cart_id = $1`,
-      [cartId]
-    );
-
-    res.json({ cart_id: cartId, items: itemsResult.rows });
-  } catch (err) {
-    console.error('Error fetching cart:', err);
-    res.status(500).json({ error: 'Server error' });
+    next();
+  });
+  registerAuth(app, pool, {
+    frontendUrl,
+    google: config.google || {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      redirectUri: process.env.GOOGLE_REDIRECT_URI,
+    },
+  });
+  function requireLogin(req, res, next) {
+    if (!req.user)
+      return res
+        .status(401)
+        .json({ message: "Please sign in to access your orders." });
+    next();
   }
-});
-
-// add item to cart
-app.post('/api/cart/add', async (req, res) => {
-  const { session_id, product_id, quantity = 1 } = req.body;
-
-  if (!session_id || !product_id) {
-    return res.status(400).json({ error: 'Missing required fields (session_id, product_id)' });
+  function requireAdmin(req, res, next) {
+    if (req.user?.role === "admin") return next();
+    const supplied = /^Bearer (\S+)$/.exec(req.get("Authorization") || "")?.[1];
+    if (
+      adminApiKey &&
+      supplied &&
+      timingSafeEqual(
+        Buffer.from(digest(supplied)),
+        Buffer.from(digest(adminApiKey)),
+      )
+    )
+      return next();
+    res
+      .status(req.user ? 403 : 401)
+      .json({ message: "Administrator access required." });
   }
-
-  try {
-    // get or create cart
-    let cartResult = await pool.query('SELECT * FROM cart WHERE session_id = $1', [session_id]);
-    let cartId;
-
-    // create new cart if none exists
-    if (cartResult.rows.length === 0) {
-      const newCart = await pool.query('INSERT INTO cart (session_id) VALUES ($1) RETURNING *', [session_id]);
-      cartId = newCart.rows[0].cart_id;
-    } else {
-      cartId = cartResult.rows[0].cart_id;
-    }
-
-    // check if product exists in cart
-    const existingItem = await pool.query(
-      'SELECT * FROM cart_items WHERE cart_id = $1 AND product_id = $2',
-      [cartId, product_id]
-    );
-
-    let result;
-    if (existingItem.rows.length > 0) {
-      // update quantity if item already exists
-      const newQuantity = existingItem.rows[0].quantity + quantity;
-      result = await pool.query(
-        'UPDATE cart_items SET quantity = $1 WHERE cart_item_id = $2 RETURNING *',
-        [newQuantity, existingItem.rows[0].cart_item_id]
-      );
-    } else {
-      // add new item to cart
-      result = await pool.query(
-        'INSERT INTO cart_items (cart_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *',
-        [cartId, product_id, quantity]
-      );
-    }
-
-    // get updated cart items
-    const updatedCart = await pool.query(
-      `SELECT ci.cart_item_id, ci.product_id, ci.quantity, p.name, p.price, p.icon
-       FROM cart_items ci
-       JOIN products p ON ci.product_id = p.product_id
-       WHERE ci.cart_id = $1`,
-      [cartId]
-    );
-
-    res.status(200).json({ 
-      message: 'Item added to cart successfully',
-      cart_id: cartId,
-      items: updatedCart.rows
-    });
-  } catch (err) {
-    console.error('Error adding item to cart:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// remove item from cart
-app.delete('/api/cart/item/:id', async (req, res) => {
-  const { id } = req.params;
-  const { session_id } = req.query;
-
-  if (!session_id) {
-    return res.status(400).json({ error: 'Missing session_id' });
-  }
-
-  try {
-    // verify the cart belongs to the session
-    const cartResult = await pool.query('SELECT * FROM cart WHERE session_id = $1', [session_id]);
-    
-    if (cartResult.rows.length === 0) {
-      return res.status(404).json({ error: 'Cart not found' });
-    }
-    
-    const cartId = cartResult.rows[0].cart_id;
-    
-    // delete the item
-    const deleteResult = await pool.query(
-      'DELETE FROM cart_items WHERE cart_item_id = $1 AND cart_id = $2 RETURNING *',
-      [id, cartId]
-    );
-    
-    if (deleteResult.rows.length === 0) {
-      return res.status(404).json({ error: 'Item not found in cart' });
-    }
-    
-    // get updated cart
-    const updatedCart = await pool.query(
-      `SELECT ci.cart_item_id, ci.product_id, ci.quantity, p.name, p.price, p.icon
-       FROM cart_items ci
-       JOIN products p ON ci.product_id = p.product_id
-       WHERE ci.cart_id = $1`,
-      [cartId]
-    );
-    
-    res.json({
-      message: 'Item removed from cart',
-      items: updatedCart.rows
-    });
-  } catch (err) {
-    console.error('Error removing item from cart:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// create a new order
-app.post('/api/orders', async (req, res) => {
-  const { session_id, customer_name, customer_email, shipping_address, total_price } = req.body;
-  
-  if (!session_id || !customer_name || !customer_email || !shipping_address) {
-    return res.status(400).json({ message: 'Missing required fields' });
-  }
-  
-  try {
-    // start a transaction
-    const client = await pool.connect();
-    
+  app.get("/api/categories", async (req, res) =>
+    res.json(
+      (await pool.query("SELECT * FROM categories ORDER BY category_id")).rows,
+    ),
+  );
+  app.get("/api/products", async (req, res) =>
+    res.json(
+      (
+        await pool.query(
+          "SELECT p.*,c.section FROM products p JOIN categories c USING(category_id) ORDER BY p.product_id",
+        )
+      ).rows,
+    ),
+  );
+  function validImage(value) {
+    if (!value) return true;
+    if (/^\/(?!\/)[^\\\s]*$/.test(value)) return true;
     try {
-      await client.query('BEGIN');
-      
-      // create the order record
-      const orderResult = await client.query(
-        `INSERT INTO orders (session_id, customer_name, customer_email, shipping_address, total_price, order_status, time_of_creation) 
-         VALUES ($1, $2, $3, $4, $5, $6, NOW()) 
-         RETURNING order_id`,
-        [session_id, customer_name, customer_email, shipping_address, total_price, 'pending']
-      );
-      
-      const orderId = orderResult.rows[0].order_id;
-      
-      // get cart items for this session
-      const cartQuery = await client.query(
-        `SELECT c.cart_id 
-         FROM cart c 
-         WHERE c.session_id = $1`, 
-        [session_id]
-      );
-      
-      if (cartQuery.rows.length === 0) {
-        throw new Error('Cart not found');
-      }
-      
-      const cartId = cartQuery.rows[0].cart_id;
-      
-      // get cart items with product information
-      const cartItemsQuery = await client.query(
-        `SELECT ci.product_id, ci.quantity, p.price 
-         FROM cart_items ci
-         JOIN products p ON ci.product_id = p.product_id
-         WHERE ci.cart_id = $1`,
-        [cartId]
-      );
-      
-      // create order items from cart items
-      for (const item of cartItemsQuery.rows) {
-        await client.query(
-          `INSERT INTO order_items (order_id, product_id, quantity, price) 
-           VALUES ($1, $2, $3, $4)`,
-          [orderId, item.product_id, item.quantity, item.price]
-        );
-        
-        // update product stock
-        await client.query(
-          `UPDATE products 
-           SET stock_quantity = stock_quantity - $1 
-           WHERE product_id = $2`,
-          [item.quantity, item.product_id]
-        );
-      }
-      
-      // commit the transaction
-      await client.query('COMMIT');
-      
-      res.status(201).json({ 
-        message: 'Order created successfully', 
-        order_id: orderId 
-      });
-    } catch (err) {
-      // rollback in case of error
-      await client.query('ROLLBACK');
-      throw err;
-    } finally {
-      client.release();
+      const url = new URL(value);
+      return url.protocol === "https:" && !url.username && !url.password;
+    } catch {
+      return false;
     }
-  } catch (error) {
-    console.error('Error creating order:', error);
-    res.status(500).json({ message: 'Server error while creating order', error: error.message });
   }
-});
-
-// clear cart after checkout
-app.post('/api/cart/clear', async (req, res) => {
-  const { session_id } = req.query;
-  
-  if (!session_id) {
-    return res.status(400).json({ message: 'Session ID is required' });
+  function productValues(body = {}) {
+    const { category_id, name, description, price, icon, stock_quantity } =
+      body;
+    if (
+      !Number.isInteger(category_id) ||
+      category_id <= 0 ||
+      category_id > 2147483647 ||
+      typeof name !== "string" ||
+      !name.trim() ||
+      name.length > 200 ||
+      (description != null &&
+        (typeof description !== "string" || description.length > 5000)) ||
+      (icon != null &&
+        (typeof icon !== "string" ||
+          icon.length > 2048 ||
+          !validImage(icon))) ||
+      !["string", "number"].includes(typeof price) ||
+      !/^\d+(\.\d{1,2})?$/.test(String(price)) ||
+      Number(price) > 100000000 ||
+      !Number.isFinite(Number(price)) ||
+      price === "" ||
+      price == null ||
+      Number(price) < 0 ||
+      !Number.isInteger(stock_quantity) ||
+      stock_quantity < 0 ||
+      stock_quantity > 1000000
+    )
+      throw fail(
+        400,
+        "Enter a category, name, nonnegative price and whole stock quantity.",
+      );
+    return [
+      category_id,
+      name.trim(),
+      description || "",
+      price,
+      icon || "",
+      stock_quantity,
+    ];
   }
-  
-  try {
-    // find the cart
-    const cartResult = await pool.query(
-      'SELECT cart_id FROM cart WHERE session_id = $1',
-      [session_id]
+  app.post("/api/products", requireAdmin, async (req, res) => {
+    const result = await pool.query(
+      "INSERT INTO products(category_id,name,description,price,icon,stock_quantity) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
+      productValues(req.body),
     );
-    
-    if (cartResult.rows.length === 0) {
-      return res.status(404).json({ message: 'Cart not found' });
-    }
-    
-    const cartId = cartResult.rows[0].cart_id;
-    
-    // delete all items from the cart
-    await pool.query('DELETE FROM cart_items WHERE cart_id = $1', [cartId]);
-    
-    res.status(200).json({ message: 'Cart cleared successfully' });
-  } catch (error) {
-    console.error('Error clearing cart:', error);
-    res.status(500).json({ message: 'Server error while clearing cart' });
+    res.status(201).json(result.rows[0]);
+  });
+  app.put("/api/products/:id", requireAdmin, async (req, res) => {
+    const result = await pool.query(
+      "UPDATE products SET category_id=$1,name=$2,description=$3,price=$4,icon=$5,stock_quantity=$6 WHERE product_id=$7 RETURNING *",
+      [...productValues(req.body), req.params.id],
+    );
+    if (!result.rowCount) throw fail(404, "Product not found.");
+    res.json(result.rows[0]);
+  });
+  app.delete("/api/products/:id", requireAdmin, async (req, res) => {
+    const result = await pool.query(
+      "DELETE FROM products WHERE product_id=$1 RETURNING *",
+      [req.params.id],
+    );
+    if (!result.rowCount) throw fail(404, "Product not found.");
+    res.json({ message: "Product deleted." });
+  });
+  async function cartData(client, id) {
+    const result = await client.query(
+      `SELECT ci.cart_item_id,ci.product_id,ci.quantity,p.name,p.price,p.icon,p.stock_quantity
+      FROM cart_items ci JOIN products p USING(product_id) WHERE ci.cart_id=$1 ORDER BY ci.cart_item_id`,
+      [id],
+    );
+    return { cart_id: id, items: result.rows };
   }
-});
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+  app.get("/api/cart", async (req, res) => {
+    res.json(
+      await transaction(pool, async (client) =>
+        cartData(client, await cartFor(client, req, res)),
+      ),
+    );
+  });
+  app.post("/api/cart/add", async (req, res) => {
+    const { product_id, quantity = 1 } = req.body || {};
+    if (
+      !Number.isInteger(product_id) ||
+      product_id <= 0 ||
+      product_id > 2147483647 ||
+      !Number.isInteger(quantity) ||
+      quantity === 0 ||
+      Math.abs(quantity) > 1000
+    )
+      throw fail(400, "Invalid product or quantity.");
+    const result = await transaction(pool, async (client) => {
+      const id = await cartFor(client, req, res);
+      const product = (
+        await client.query(
+          "SELECT stock_quantity FROM products WHERE product_id=$1",
+          [product_id],
+        )
+      ).rows[0];
+      if (!product) throw fail(404, "Product not found.");
+      const existing = (
+        await client.query(
+          "SELECT quantity FROM cart_items WHERE cart_id=$1 AND product_id=$2",
+          [id, product_id],
+        )
+      ).rows[0];
+      const next = (existing?.quantity || 0) + quantity;
+      if (next <= 0 || next > 1000)
+        throw fail(400, "Quantity must be between 1 and 1000.");
+      if (next > product.stock_quantity)
+        throw fail(409, "There is not enough stock available.");
+      await client.query(
+        `INSERT INTO cart_items(cart_id,product_id,quantity) VALUES($1,$2,$3)
+        ON CONFLICT(cart_id,product_id) DO UPDATE SET quantity=EXCLUDED.quantity`,
+        [id, product_id, next],
+      );
+      return cartData(client, id);
+    });
+    res.json(result);
+  });
+  app.delete("/api/cart/item/:id", async (req, res) => {
+    res.json(
+      await transaction(pool, async (client) => {
+        const id = await cartFor(client, req, res);
+        const result = await client.query(
+          "DELETE FROM cart_items WHERE cart_id=$1 AND cart_item_id=$2 RETURNING cart_item_id",
+          [id, req.params.id],
+        );
+        if (!result.rowCount) throw fail(404, "Item not found in your cart.");
+        return cartData(client, id);
+      }),
+    );
+  });
+  app.post("/api/cart/clear", async (req, res) => {
+    await transaction(pool, async (client) => {
+      const id = await cartFor(client, req, res);
+      await client.query("DELETE FROM cart_items WHERE cart_id=$1", [id]);
+    });
+    res.json({ items: [] });
+  });
+  app.get("/api/orders", requireLogin, async (req, res) => {
+    const result = await pool.query(
+      `SELECT o.order_id,o.customer_name,o.shipping_address,o.total_price,
+        o.order_status,o.time_of_creation,
+        COALESCE((SELECT json_agg(json_build_object(
+          'order_item_id',oi.order_item_id,'name',oi.product_name,'icon',oi.product_icon,
+          'quantity',oi.quantity,'price',oi.price::text,
+          'subtotal',(oi.quantity*oi.price)::text
+        ) ORDER BY oi.order_item_id) FROM order_items oi
+        WHERE oi.order_id=o.order_id), '[]'::json) AS items
+       FROM orders o WHERE o.user_id=$1
+       ORDER BY o.time_of_creation DESC,o.order_id DESC`,
+      [req.user.user_id],
+    );
+    res.json({ orders: result.rows });
+  });
+  app.post("/api/orders", requireLogin, async (req, res) => {
+    const { validateShipping, formatShipping } =
+      await import("../shared/shipping.mjs");
+    const { values, errors, country } = validateShipping(req.body || {});
+    if (Object.keys(errors).length)
+      return res
+        .status(400)
+        .json({ message: "Please check your shipping details.", errors });
+    const customer_name = `${values.first_name} ${values.last_name}`;
+    const shipping_address = formatShipping(values, country);
+    const order = await transaction(pool, async (client) => {
+      const cartId = await cartFor(client, req, res);
+      const items = (
+        await client.query(
+          `SELECT ci.product_id,ci.quantity,p.price,p.stock_quantity,p.name,p.icon
+        FROM cart_items ci JOIN products p USING(product_id) WHERE ci.cart_id=$1 ORDER BY p.product_id FOR UPDATE OF ci,p`,
+          [cartId],
+        )
+      ).rows;
+      if (!items.length) throw fail(400, "Your cart is empty.");
+      if (
+        items.some(
+          (i) =>
+            !Number.isInteger(i.quantity) ||
+            i.quantity <= 0 ||
+            i.price == null ||
+            !Number.isFinite(Number(i.price)) ||
+            Number(i.price) < 0,
+        )
+      )
+        throw fail(400, "Your cart contains an invalid item.");
+      if (
+        items.some(
+          (i) => i.stock_quantity == null || i.quantity > i.stock_quantity,
+        )
+      )
+        throw fail(
+          409,
+          "Some items are no longer available in the requested quantity. Please update your cart.",
+        );
+      const inserted = await client.query(
+        `INSERT INTO orders(user_id,customer_name,customer_email,shipping_address,shipping_details,total_price,order_status,time_of_creation)
+        VALUES($1,$2,$3,$4,$5,0,'pending',NOW()) RETURNING order_id`,
+        [
+          req.user.user_id,
+          customer_name.trim(),
+          req.user.email,
+          shipping_address,
+          JSON.stringify(values),
+        ],
+      );
+      const id = inserted.rows[0].order_id;
+      for (const item of items) {
+        await client.query(
+          "INSERT INTO order_items(order_id,product_id,quantity,price,product_name,product_icon) VALUES($1,$2,$3,$4,$5,$6)",
+          [
+            id,
+            item.product_id,
+            item.quantity,
+            item.price,
+            item.name,
+            item.icon,
+          ],
+        );
+        await client.query(
+          "UPDATE products SET stock_quantity=stock_quantity-$1 WHERE product_id=$2",
+          [item.quantity, item.product_id],
+        );
+      }
+      // Exact NUMERIC calculation uses the same price snapshots saved on order lines.
+      const result = await client.query(
+        `UPDATE orders SET total_price=(SELECT SUM(quantity*price) FROM order_items WHERE order_id=$1)
+        WHERE order_id=$1 RETURNING order_id,total_price`,
+        [id],
+      );
+      await client.query("DELETE FROM cart_items WHERE cart_id=$1", [cartId]);
+      return result.rows[0];
+    });
+    res.status(201).json({ message: "Order placed.", ...order });
+  });
+  app.use("/api", (req, res) =>
+    res.status(404).json({ message: "Endpoint not found." }),
+  );
+  app.use((error, req, res, next) => {
+    if (res.headersSent) return next(error);
+    const status =
+      error.status ||
+      (error.code === "23503" ? 409 : error.code === "22P02" ? 400 : 500);
+    // Do not log SQL parameters, cookies, OAuth responses or request bodies.
+    if (status === 500)
+      console.error("API request failed", {
+        code: error.code || "internal_error",
+      });
+    res.status(status).json({
+      message:
+        error.type === "entity.parse.failed"
+          ? "Invalid JSON body."
+          : error.type === "entity.too.large"
+            ? "Request body is too large."
+            : error.status
+              ? error.message
+              : status === 409
+                ? "This item is referenced by an existing order or cart."
+                : status === 400
+                  ? "Invalid request."
+                  : "Something went wrong. Please try again.",
+    });
+  });
+  return app;
+}
+if (require.main === module) {
+  const pool = createPool();
+  migrate(pool)
+    .then(() => {
+      const port = process.env.PORT || 5001;
+      const server = createApp(pool).listen(port, "127.0.0.1", () =>
+        console.log(`API running at http://localhost:${port}`),
+      );
+      server.requestTimeout = 30000;
+      server.headersTimeout = 15000;
+      for (const signal of ["SIGINT", "SIGTERM"]) {
+        process.once(signal, () => {
+          const deadline = setTimeout(() => process.exit(1), 10000);
+          deadline.unref();
+          server.close(async () => {
+            await pool.end();
+            clearTimeout(deadline);
+            process.exit(0);
+          });
+        });
+      }
+      server.on("error", (error) => {
+        console.error(error);
+        process.exit(1);
+      });
+    })
+    .catch((error) => {
+      console.error("Database setup failed:", error);
+      process.exit(1);
+    });
+}
+module.exports = { createApp };

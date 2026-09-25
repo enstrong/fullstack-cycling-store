@@ -1,93 +1,115 @@
-import React, { useState } from 'react';
-import '@/css/App.css';
-import '@/css/tabs/support.css';
-
+import { useState } from "react";
+import "@/css/tabs/support.css";
+const questions = [
+  [
+    "How do I track my order?",
+    "Your order number is shown after checkout. Keep it handy when contacting us about delivery or an order update.",
+  ],
+  [
+    "What is your return policy?",
+    "Contact us with your order number before sending an item back. We can help you check eligibility and arrange the next steps.",
+  ],
+  [
+    "Do you ship internationally?",
+    "Please contact us to confirm delivery availability for your country before placing an order.",
+  ],
+  [
+    "How do I find the right bike size?",
+    "Start with your height and inseam, then compare them with the manufacturer’s size chart for the specific model. If you’re between sizes, a professional bike fitting can help you choose a comfortable reach and riding position.",
+  ],
+  [
+    "Do I need an account to shop?",
+    "You can browse and add items to your cart without an account. Sign in or create an account when you’re ready to order. Your guest items will move into your account cart.",
+  ],
+];
 export default function Support() {
-  const [showFAQ, setShowFAQ] = useState(false);
-  const [expandedQuestions, setExpandedQuestions] = useState({});
-
-  const toggleFAQ = () => {
-    setShowFAQ(!showFAQ);
-    if (showFAQ) {
-      setExpandedQuestions({});
-    }
-  };
-
-  const toggleQuestion = (questionId) => {
-    setExpandedQuestions(prev => ({
-      ...prev,
-      [questionId]: !prev[questionId]
-    }));
-  };
-
-  const faqItems = [
-    {
-      id: "q1",
-      question: "How do I track my order?",
-      answer: "All updates about your order are sent to your email, which you provided when purchasing from us."
-    },
-    {
-      id: "q2",
-      question: "What is your return policy?",
-      answer: "We offer a 30-day return policy for all unused items in original packaging. Custom orders and sale items may have different return policies."
-    },
-    {
-      id: "q3",
-      question: "Do you ship internationally?",
-      answer: "Yes, we ship to most countries worldwide. Shipping rates and delivery times vary based on location. Please check our shipping page for more details."
-    },
-    {
-      id: "q4",
-      question: "How do I determine the right bike size for me?",
-      answer: "Are you dumb?"
-    }
-  ];
-
+  const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(null);
   return (
-    <>
-      <div className="section support d-flex align-center">
-        <div className="container d-flex align-center justify-center f-column">
-          <h1 className="support-title uppercase">Customer Support</h1>
-          <section className="support-info">
-            <p className="support-text">Need help? Our support team is here for you</p>
-            <div className="support-buttons d-flex align-center justify-space-between">
-              <button 
-                className="bikes-section__button d-flex" 
-                onClick={toggleFAQ}
-              >
-                FAQ {showFAQ ? '▲' : '▼'}
-              </button>
-              <a href="tel:87776664433"><button className="bikes-section__button d-flex">Contact us &#8594;</button></a>
-            </div>
-            
-            {showFAQ && (
-              <div className="faq-container">
-                <h2 className="faq-heading">Frequently Asked Questions</h2>
-                <div className="faq-list">
-                  {faqItems.map((item) => (
-                    <div key={item.id} className="faq-item">
-                      <div 
-                        className="faq-question" 
-                        onClick={() => toggleQuestion(item.id)}
-                      >
-                        <span>{item.question}</span>
-                        <span className="faq-toggle-icon">
-                          {expandedQuestions[item.id] ? '−' : '+'}
-                        </span>
-                      </div>
-                      {expandedQuestions[item.id] && (
-                        <div className="faq-answer">
-                          <p>{item.answer}</p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </section>
+    <main className="support-page page-shell">
+      <div className="container support-layout">
+        <div className="support-intro">
+          <span className="eyebrow">WE’RE ALONG FOR THE RIDE</span>
+          <h1>
+            A little help.
+            <br />
+            <em>A better ride.</em>
+          </h1>
+          <p>
+            From finding your fit to getting your order on the road. Start here.
+          </p>
+          <a className="text-link" href="tel:87776664433">
+            Talk to us ↗
+          </a>
         </div>
+        <section className="support-panel">
+          <span className="eyebrow">THE ANSWERS YOU’RE LOOKING FOR</span>
+          <button
+            className="faq-master"
+            aria-expanded={open}
+            aria-controls="faq-list"
+            onClick={() => setOpen(!open)}
+          >
+            <span>
+              Frequently asked
+              <br />
+              questions.
+            </span>
+            <span
+              className={`faq-cross ${open ? "rotated" : ""}`}
+              aria-hidden="true"
+            >
+              +
+            </span>
+          </button>
+          <p className="muted support-panel-note">
+            The essentials, before you head out.
+          </p>
+          <div
+            className={`faq-reveal ${open ? "expanded" : ""}`}
+            id="faq-list"
+            aria-hidden={!open}
+            inert={!open}
+          >
+            <div className="faq-overflow">
+              <div className="faq-list">
+                {questions.map(([question, answer], i) => (
+                  <div
+                    className={`faq-item ${expanded === i ? "active" : ""}`}
+                    key={question}
+                  >
+                    <button
+                      className="faq-question"
+                      aria-expanded={expanded === i}
+                      aria-controls={`answer-${i}`}
+                      onClick={() => setExpanded(expanded === i ? null : i)}
+                    >
+                      <span className="faq-number">0{i + 1}</span>
+                      <span>{question}</span>
+                      <span
+                        className={`faq-cross ${expanded === i ? "rotated" : ""}`}
+                        aria-hidden="true"
+                      >
+                        +
+                      </span>
+                    </button>
+                    <div
+                      className={`faq-reveal ${expanded === i ? "expanded" : ""}`}
+                      id={`answer-${i}`}
+                      aria-hidden={expanded !== i}
+                      inert={expanded !== i}
+                    >
+                      <div className="faq-overflow">
+                        <p className="faq-answer">{answer}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
-    </>
+    </main>
   );
 }

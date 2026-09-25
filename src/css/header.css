@@ -10,37 +10,37 @@
 .header a {
   font-weight: 700;
   font-size: 20px;
-  transition: .5s;
-  -webkit-transition: .5s;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease;
 }
 
-.header a:hover {
-  opacity: .8;
-  font-size: 24px;
+.header a:is(:hover, :focus-visible) {
+  opacity: 0.8;
+  transform: scale(1.2);
+}
+
+.header .mobile-logo-link:is(:hover, :focus-visible) {
+  transform: translateX(-50%) scale(1.2);
 }
 
 .header__logo {
   vertical-align: middle;
   display: inline-block;
-  transition: transform 0.3s ease-in-out, opacity 0.3s;
-}
-
-.header__logo:hover {
-  transform: scale(1.2); 
-  opacity: 0.8;
 }
 
 .header__logo-tdf {
   height: 90px;
 }
 
-.header__logo-cart {
-  height: 40px;
+.header-action-icon {
+  display: block;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
 }
 
 .main-header-nav {
   display: flex;
-  align-items: center; 
+  align-items: center;
   height: 100%;
   justify-content: center;
 }
@@ -52,9 +52,9 @@
 }
 
 .main-header-nav a.active {
-  color: #FFBC00; 
+  color: #ffbc00;
   font-weight: bold;
-  border-bottom: 2px solid #FFBC00;
+  border-bottom: 2px solid #ffbc00;
 }
 
 .main-header-nav a + a {
@@ -167,9 +167,54 @@
 }
 
 .mobile-nav-links a.active {
-  color: #FFBC00;
+  color: #ffbc00;
 }
 
 body.lock {
   overflow: hidden;
+}
+.header-account-link {
+  position: relative;
+  flex-shrink: 0;
+  color: inherit;
+}
+.account-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e9c94b;
+  right: 0;
+  bottom: 8px;
+}
+.mobile-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  z-index: 102;
+}
+.mobile-header-actions .mobile-cart-link {
+  margin-left: 0;
+}
+.main-header-nav a + a {
+  margin-left: clamp(20px, 3.7vw, 46px);
+}
+.mobile-header .burger-menu-button {
+  margin-right: 0;
+  padding-right: 0;
+}
+@media (max-width: 700px) {
+  .header .container {
+    padding-inline: 20px;
+  }
+  .header-action-icon {
+    width: 25px;
+    height: 25px;
+  }
+  .mobile-header-actions .account-dot {
+    bottom: 0;
+  }
+  .header__logo-tdf {
+    height: 76px;
+  }
 }
