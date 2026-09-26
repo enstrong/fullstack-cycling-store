@@ -20,6 +20,10 @@ import Cart from "@/components/tabs/cart.jsx";
 import Checkout from "@/components/tabs/checkout.jsx";
 import Admin from "@/components/tabs/admin.jsx";
 import ScrollToTop from "@/components/scrollTop.jsx";
+import "./css/design-overrides.css";
+import "./css/dynamic-header.css";
+import SectionEntrances from "@/components/section-entrances.jsx";
+import "./css/interactions.css";
 
 export default function App() {
   return (
@@ -27,6 +31,7 @@ export default function App() {
       <AuthProvider>
         <ComparisonProvider>
           <RoutePosition />
+          <SectionEntrances />
           <div className="wrapper">
             <Header />
 

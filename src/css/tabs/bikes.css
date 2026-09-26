@@ -74,8 +74,9 @@
 }
 
 .sworks__button:hover {
-  background-color: #2A8DD9;
-  border-color: #2A8DD9;
+  background-color: #FFBC00;
+  border-color: #FFBC00;
+  color: #000;
 }
 
 .cervelo-title {
@@ -96,7 +97,7 @@
 }
 
 .buy-now .bikes-section__button {
-  border-radius: 3px;
+  border-radius: 14px;
   border-width: 1px;
   padding: 16px 26px;
   font-size: 16px;

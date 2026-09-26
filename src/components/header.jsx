@@ -1,10 +1,12 @@
+import useCartCount from "@/use-cart-count";
 import CompareLink from "@/components/compare-link.jsx";
 import { useAuth } from "@/auth";
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import TourLogo from "@/components/tdf-logo.jsx";
+import useHeaderTheme from "@/use-header-theme";
 import "@/css/App.css";
 import "@/css/header.css";
-import TdFlogo from "/icons/TdF_logo_white.png";
 
 function CartIcon() {
   return (
@@ -53,9 +55,13 @@ function AccountIcon() {
 }
 
 export default function Header() {
+  const cartCount = useCartCount();
+  const cartLabel = `Cart (${cartCount} ${cartCount === 1 ? "item" : "items"})`;
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 700);
   const { pathname } = useLocation();
+  const headerRef = useRef(null);
+  const { accent, contrast } = useHeaderTheme(pathname, headerRef);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -90,7 +96,11 @@ export default function Header() {
   };
 
   return (
-    <div className={`header ${pathname === "/compare" ? "header-comparison" : ""}`}>
+    <header
+      ref={headerRef}
+      data-accent={accent}
+      className={`header ${pathname === "/compare" ? "header-comparison" : ""} ${contrast ? "header-contrast" : ""}`}
+    >
       <div className="container header-content">
         {isMobile ? (
           <>
@@ -99,27 +109,25 @@ export default function Header() {
                 <Link
                   to="/cart"
                   onClick={handleClick}
-                  className="mobile-cart-link"
-                  aria-label="Cart"
+                  className="mobile-cart-link header-cart-link"
+                  aria-label={cartLabel}
                 >
                   <CartIcon />
+                  {cartCount > 0 && <span className="compare-count cart-count" aria-hidden="true">{cartCount}</span>}
                 </Link>
                 <CompareLink />
                 <AccountIcon />
               </div>
 
-              <Link to="/" onClick={handleClick} className="mobile-logo-link">
-                <img
-                  src={TdFlogo}
-                  alt="TdF logo"
-                  className="header__logo header__logo-tdf"
-                />
+              <Link to="/" onClick={handleClick} className="mobile-logo-link" aria-label="Tour de France — home">
+                <TourLogo />
               </Link>
 
               <button
                 className="burger-menu-button"
                 onClick={toggleMenu}
                 aria-label="Menu"
+                aria-expanded={isOpen}
               >
                 <div className={`burger-icon ${isOpen ? "open" : ""}`}>
                   <span></span>
@@ -178,12 +186,8 @@ export default function Header() {
             >
               Teams
             </Link>
-            <Link to="/" onClick={handleClick}>
-              <img
-                src={TdFlogo}
-                alt="TdF logo"
-                className="header__logo header__logo-tdf"
-              />
+            <Link to="/" onClick={handleClick} aria-label="Tour de France — home">
+              <TourLogo />
             </Link>
             <Link
               to="/gear"
@@ -199,14 +203,15 @@ export default function Header() {
             >
               Support
             </Link>
-            <Link to="/cart" onClick={handleClick} aria-label="Cart">
+            <Link to="/cart" className="header-cart-link" onClick={handleClick} aria-label={cartLabel}>
               <CartIcon />
+                  {cartCount > 0 && <span className="compare-count cart-count" aria-hidden="true">{cartCount}</span>}
             </Link>
             <CompareLink />
             <AccountIcon />
           </nav>
         )}
       </div>
-    </div>
+    </header>
   );
 }

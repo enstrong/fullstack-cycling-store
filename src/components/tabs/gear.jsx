@@ -2,21 +2,25 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useComparison } from "@/comparison-context";
 import ProductFacts from "@/components/product-facts.jsx";
+import ProductExplorer from "@/components/product-explorer.jsx";
+import BikeShelf from "@/components/bike-shelf.jsx";
 import "@/css/tabs/compare.css";
 import { api, money } from "@/api";
 import "@/css/tabs/gear.css";
-function ProductCard({ product, category, add, busy }) {
+function ProductCard({ product, category, add, busy, blocked, added, explore }) {
   const { ids, toggle } = useComparison();
   const selected = ids.includes(product.product_id);
   return (
-    <article className={`shop-card ${category === "Bikes" ? "bike-card" : ""}`}>
-      <div className="shop-card-visual">
+    <article data-entrance={product.section !== "bikes" ? "card" : undefined} className={`shop-card ${category === "Bikes" ? "bike-card" : ""}`}>
+      <button type="button" className="shop-card-visual product-image-trigger" data-header-surface="light"
+        onClick={() => explore(product)} aria-label={`Explore ${product.name} image`} aria-haspopup="dialog">
         <span className="product-tag">{category}</span>
         <img src={product.icon} alt={product.name} loading="lazy" />
+        <span className="image-explore-hint" aria-hidden="true">View image ↗</span>
         <span className="stock-tag">
           {product.stock_quantity > 0 ? "Ready to ride" : "Sold out"}
         </span>
-      </div>
+      </button>
       <div className="shop-card-content">
         <div className="shop-card-title">
           <h3>{product.name}</h3>
@@ -40,8 +44,9 @@ function ProductCard({ product, category, add, busy }) {
               : "+ Compare this product"}
         </button>
         <button
-          className="add-product"
-          disabled={busy || product.stock_quantity < 1}
+          className={`add-product ${added ? "product-added" : ""}`}
+          disabled={blocked || product.stock_quantity < 1}
+          aria-busy={busy}
           onClick={() => add(product)}
           aria-label={`Add ${product.name} to cart`}
         >
@@ -50,9 +55,17 @@ function ProductCard({ product, category, add, busy }) {
               ? "Adding…"
               : product.stock_quantity < 1
                 ? "Out of stock"
-                : "Add to cart"}
+                : added ? "Added to cart" : "Add to cart"}
           </span>
-          <span className="add-product-icon">+</span>
+          <span className={`add-product-icon ${busy ? "is-pending" : ""}`} aria-hidden="true">
+            {busy ? "↻" : added ? "✓" : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 3h2l2.5 12h13l2-8H5" />
+                <circle cx="8" cy="20" r="1" />
+                <circle cx="18" cy="20" r="1" />
+              </svg>
+            )}
+          </span>
         </button>
       </div>
     </article>
@@ -68,7 +81,9 @@ export default function Gear() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(null);
   const [notice, setNotice] = useState("");
-  const rail = useRef(null);
+  const [added, setAdded] = useState(null);
+  const [exploring, setExploring] = useState(null);
+  const pending = useRef(false);
   useEffect(() => {
     let live = true;
     Promise.all([api("/products"), api("/categories")])
@@ -94,6 +109,9 @@ export default function Gear() {
     return () => clearTimeout(timer);
   }, [notice]);
   async function add(product) {
+    if (pending.current) return;
+    pending.current = true;
+    setAdded(null);
     setBusy(product.product_id);
     try {
       await api("/cart/add", {
@@ -101,12 +119,19 @@ export default function Gear() {
         body: JSON.stringify({ product_id: product.product_id, quantity: 1 }),
       });
       setNotice(`${product.name} added to your cart.`);
+      setAdded(product.product_id);
     } catch (err) {
       setNotice(err.message);
     } finally {
+      pending.current = false;
       setBusy(null);
     }
   }
+  useEffect(() => {
+    if (added === null) return;
+    const timer = setTimeout(() => setAdded(null), 2200);
+    return () => clearTimeout(timer);
+  }, [added]);
   const filtered = products.filter(
     (p) =>
       (category === "all" || p.category_id === category) &&
@@ -126,7 +151,10 @@ export default function Gear() {
         categories.find((c) => c.category_id === product.category_id)?.name
       }
       add={add}
-      busy={busy !== null}
+      busy={busy === product.product_id}
+      blocked={busy !== null}
+      added={added === product.product_id}
+      explore={setExploring}
     />
   );
   const orderedCategories = [...categories].sort(
@@ -134,6 +162,7 @@ export default function Gear() {
   );
   return (
     <main className="shop-page">
+      {exploring && <ProductExplorer key={exploring.product_id} product={exploring} onClose={() => setExploring(null)} />}
       {notice && (
         <div className="shop-toast" role="status">
           {notice}
@@ -141,47 +170,37 @@ export default function Gear() {
         </div>
       )}
       <section className="shop-hero container">
-        <div className="shop-hero-copy">
-          <span className="eyebrow">THE WINNER BIKES COLLECTION / 01</span>
+        <div data-entrance className="shop-hero-copy">
+          <span className="eyebrow">TOUR DE FRANCE · THE WINNERS’ EQUIPMENT</span>
           <h1>
-            The riders. The victories.
+            Made for the race.
             <br />
-            <em>Their equipment.</em>
+            <em>Remembered by it.</em>
           </h1>
           <p>
-            Explore equipment connected to Tour de France champions, from
-            historic winning machines to the gear they rode next. Every verified
-            connection has a story. Every unconfirmed detail is marked.
+            Explore the bikes and equipment linked to Tour de France winners,
+            from historic machines to the latest race gear. Product details and
+            rider connections are sourced, with unknowns clearly marked.
           </p>
           <a href="#collection" className="shop-explore">
-            Explore the collection <span>↓</span>
+            View the collection <span>↓</span>
           </a>
         </div>
-        <div className="shop-hero-art">
-          <span className="hero-outline" aria-hidden="true">
-            RIDE
-          </span>
+        <div className="shop-hero-art" data-header-surface="light">
           <img
             src="/products/bike_cervelo.png"
             alt="Cervélo R5 road bike in side profile"
           />
           <div className="hero-art-caption">
-            <span>PRECISION. PERFORMANCE. PURE JOY.</span>
-            <span>↗</span>
+            <span>CERVÉLO R5 · TOUR WINNING FLEET</span>
+            <span>01</span>
           </div>
         </div>
       </section>
-      <div className="shop-trust">
-        <div className="container">
-          <span>Tour-winning heritage</span>
-          <span>Complimentary shipping</span>
-          <span>Specs with sources</span>
-        </div>
-      </div>
       <section id="collection" className="shop-collection container">
         <div className="collection-heading">
           <div>
-            <span className="eyebrow">YOUR RIDE, YOUR WAY</span>
+          <span className="eyebrow">RACE HERITAGE, WITH THE DETAILS</span>
             <h2>
               The collection
               <span className="count-badge">{filtered.length}</span>
@@ -191,7 +210,7 @@ export default function Gear() {
             <span className="sr-only">Search products</span>
             <input
               type="search"
-              placeholder="Find your next essential…"
+              placeholder="Search bikes and equipment…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -249,49 +268,7 @@ export default function Gear() {
         ) : (
           <>
             {bikes.length > 0 && (
-              <section className="bike-shelf" aria-label="Bikes">
-                <div className="shelf-heading">
-                  <div>
-                    <span className="eyebrow">ENGINEERED TO GO FURTHER</span>
-                    <h2>The race machines.</h2>
-                  </div>
-                  <div className="rail-controls">
-                    <button
-                      aria-label="Previous bikes"
-                      onClick={() =>
-                        rail.current?.scrollBy({
-                          left: -rail.current.clientWidth * 0.8,
-                          behavior: "smooth",
-                        })
-                      }
-                    >
-                      ←
-                    </button>
-                    <button
-                      aria-label="Next bikes"
-                      onClick={() =>
-                        rail.current?.scrollBy({
-                          left: rail.current.clientWidth * 0.8,
-                          behavior: "smooth",
-                        })
-                      }
-                    >
-                      →
-                    </button>
-                  </div>
-                </div>
-                <div
-                  className="bike-rail"
-                  ref={rail}
-                  tabIndex="0"
-                  aria-label="Scroll to explore bikes"
-                >
-                  {bikes.map(card)}
-                </div>
-                <p className="rail-hint">
-                  SCROLL TO EXPLORE <span>↔</span>
-                </p>
-              </section>
+              <BikeShelf bikes={bikes}>{bikes.map(card)}</BikeShelf>
             )}
             {gear.length > 0 && (
               <section
@@ -301,11 +278,11 @@ export default function Gear() {
                 <div className="shelf-heading">
                   <div>
                     <span className="eyebrow">
-                      SMALL DETAILS. BIG DIFFERENCE.
+                      GEAR FROM THE PELOTON
                     </span>
                     <h2>
                       {category === "all"
-                        ? "The ride essentials."
+                        ? "Equipment of the winners."
                         : categories.find((c) => c.category_id === category)
                             ?.name}
                     </h2>
@@ -319,9 +296,7 @@ export default function Gear() {
         )}
       </section>
       <div className="shop-closing container">
-        <span className="eyebrow">LESS SCROLLING. MORE RIDING.</span>
-        <h2>See you out there.</h2>
-        <Link to="/support">Need a hand choosing? Let’s talk ↗</Link>
+        <Link to="/support">Questions about the collection? Visit support ↗</Link>
       </div>
     </main>
   );

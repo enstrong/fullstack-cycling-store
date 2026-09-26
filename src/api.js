@@ -17,6 +17,10 @@ export async function api(path, options = {}) {
     error.fields = data.errors;
     throw error;
   }
+  if (options.method && options.method.toUpperCase() !== "GET" &&
+      (path.startsWith("/cart/") || path === "/orders")) {
+    window.dispatchEvent(new Event("cart-changed"));
+  }
   return data;
 }
 export const money = (value) =>

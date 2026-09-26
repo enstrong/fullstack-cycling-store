@@ -1,0 +1,86 @@
+.header {
+  --header-accent: #ffbc00;
+  isolation: isolate;
+}
+.header[data-accent="red"] { --header-accent: #ff4545; }
+.header[data-accent="light-blue"] { --header-accent: #68c9ff; }
+.header[data-accent="blue"] { --header-accent: #26a9ed; }
+
+.header-content { height: 100%; }
+.header-cart-link { position: relative; }
+.header .cart-count { padding: 0 3px; text-shadow: none; }
+.header .header__logo-tdf {
+  display: block;
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+}
+.header .tdf-logo-lettering { fill: #fff; }
+.header .tdf-logo-accent {
+  fill: var(--header-accent);
+  transition: fill 450ms ease;
+}
+.header .main-header-nav a.active,
+.header .mobile-nav-links a.active {
+  color: var(--header-accent);
+  border-color: var(--header-accent);
+}
+.header .compare-count,
+.header .account-dot {
+  background: var(--header-accent);
+  transition: background-color 450ms ease;
+}
+.header a {
+  text-shadow: 0 1px 4px rgb(0 0 0 / 65%);
+  transition: transform 300ms ease-in-out, opacity 300ms ease,
+    color 450ms ease, border-color 450ms ease, text-shadow 300ms ease;
+}
+.header .header-action-icon,
+.header .header__logo-tdf,
+.header .burger-icon {
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 45%));
+  transition: filter 300ms ease;
+}
+
+/* A dark backing appears only while pale product panels pass behind the header. */
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: rgb(8 8 8 / 82%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgb(255 255 255 / 24%);
+  box-shadow: 0 4px 18px rgb(0 0 0 / 18%);
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.header.header-contrast::before { opacity: 1; }
+.header.header-contrast a {
+  text-shadow: 0 1px 3px #000, 0 0 1px #000;
+}
+.header.header-contrast .header-action-icon,
+.header.header-contrast .header__logo-tdf,
+.header.header-contrast .burger-icon {
+  filter: drop-shadow(0 1px 2px #000) drop-shadow(0 0 1px #000);
+}
+.header.header-contrast .compare-count { text-shadow: none; }
+
+@media (max-width: 700px) {
+  .header .header__logo-tdf { width: 76px; height: 76px; }
+}
+@media (max-width: 360px) {
+  .header .header__logo-tdf { width: 62px; height: 62px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .header::before,
+  .header a,
+  .header .tdf-logo-accent,
+  .header .compare-count,
+  .header .account-dot,
+  .header .header-action-icon,
+  .header .header__logo-tdf,
+  .header .burger-icon { transition: none; }
+}

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useComparison } from "@/comparison-context";
+import { useEffect, useRef } from "react";
 export function CompareIcon() {
   return (
     <svg
@@ -18,6 +19,19 @@ export function CompareIcon() {
 }
 export default function CompareLink() {
   const { ids } = useComparison();
+  const badge = useRef(null);
+  const previousIds = useRef(ids);
+  useEffect(() => {
+    const added = ids.some((id) => !previousIds.current.includes(id));
+    previousIds.current = ids;
+    if (!added || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const animation = badge.current?.animate([
+      { transform: "scale(1)" },
+      { transform: "scale(1.4)", offset: 0.35 },
+      { transform: "scale(1)" },
+    ], { duration: 380, easing: "ease-out" });
+    return () => animation?.cancel();
+  }, [ids]);
   return (
     <Link
       to="/compare"
@@ -26,7 +40,8 @@ export default function CompareLink() {
       title="Compare products"
     >
       <CompareIcon />
-      {ids.length > 0 && <span className="compare-count">{ids.length}</span>}
+      {ids.length > 0 && <span ref={badge} className="compare-count">{ids.length}</span>}
+      <span className="sr-only" role="status">{ids.length} products selected for comparison</span>
     </Link>
   );
 }

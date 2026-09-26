@@ -15,7 +15,7 @@ export default function Teams() {
 
   return (
     <>
-      <div className="section teams-section d-flex align-center">
+      <div data-header-accent="yellow" className="section teams-section d-flex align-center">
         <div className="container d-flex align-center justify-space-between teams-section__group-logos">
           <div onClick={() => scrollToElement('uae')}>
             <img src={UAE} alt="uae team logo" className="teams-section__logo teams-section__logo-uae"/>
@@ -32,10 +32,10 @@ export default function Teams() {
         </div>
       </div>
 
-      <div id='uae' className="section uaeteam d-flex align-center">
+      <div data-header-accent="yellow" id='uae' className="section uaeteam d-flex align-center">
         <div className="container d-flex align-center justify-center f-column">
-          <h1 className="uaeteam-title uppercase">UAE Team Emirates</h1>
-          <section className="team-info">
+          <h1 data-entrance className="uaeteam-title uppercase">UAE Team Emirates</h1>
+          <section data-entrance className="team-info">
             <p className="uaeteam-text">Led by Tadej Pogačar, UAE Team Emirates has dominated the Tour de France in recent years.</p>
             <div className="team-achievements">
               <h3>Key Achievements:</h3>
@@ -50,10 +50,10 @@ export default function Teams() {
         </div>
       </div>
   
-      <div id='visma' className="section teamvisma section d-flex align-center">
+      <div data-header-accent="yellow" id='visma' className="section teamvisma section d-flex align-center">
         <div className="container d-flex align-center justify-center f-column">
-          <h1 className="teamvisma-title">Team Visma | Lease a Bike</h1>
-          <section className="team-info">
+          <h1 data-entrance className="teamvisma-title">Team Visma | Lease a Bike</h1>
+          <section data-entrance className="team-info">
             <p className="uaeteam-text teamvisma-text">With Jonas Vingegaard as team leader, Visma | Lease a Bike continues to be a major force in professional cycling.</p>
             <div className="team-achievements">
               <h3>Key Achievements:</h3>
@@ -68,10 +68,10 @@ export default function Teams() {
         </div>
       </div>
   
-      <div id='sky' className="section teamsky section d-flex align-center">
+      <div data-header-accent="blue" id='sky' className="section teamsky section d-flex align-center">
         <div className="container d-flex align-center justify-center f-column">
-          <h1 className="teamvisma-title">Team Sky | INEOS Grenadiers</h1>
-          <section className="team-info">
+          <h1 data-entrance className="teamvisma-title">Team Sky | INEOS Grenadiers</h1>
+          <section data-entrance className="team-info">
             <p className="uaeteam-text teamvisma-text">With 7 Tour de France victories in just eight years, INEOS Grenadiers redefined dominance in professional cycling.</p>
             <div className="team-achievements">
               <h3>Key Achievements:</h3>
@@ -86,10 +86,10 @@ export default function Teams() {
         </div>
       </div>
   
-      <div id='astana' className="section astana section d-flex align-center">
+      <div data-header-accent="yellow" id='astana' className="section astana section d-flex align-center">
         <div className="container d-flex align-center justify-center f-column">
-          <h1 className="teamvisma-title">Astana Qazaqstan Team</h1>
-          <section className="team-info">
+          <h1 data-entrance className="teamvisma-title">Astana Qazaqstan Team</h1>
+          <section data-entrance className="team-info">
             <p className="uaeteam-text teamvisma-text">A team built on resilience and strategy, Astana Qazaqstan Team has showcased its strength on cycling's biggest stage.</p>
             <div className="team-achievements">
               <h3>Key Achievements:</h3>
