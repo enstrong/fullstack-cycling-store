@@ -345,3 +345,6 @@ button:disabled {
     scroll-behavior: auto !important;
   }
 }
+
+.route-content, .route-loading { min-height: 75vh; background-color: #090909; }
+.route-loading { display: grid; align-content: center; justify-items: center; gap: 20px; padding: 140px 24px 80px; }

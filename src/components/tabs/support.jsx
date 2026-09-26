@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "@/css/tabs/support.css";
 const questions = [
   [
     "How do I track my order?",

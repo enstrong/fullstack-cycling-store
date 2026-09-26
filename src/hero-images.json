@@ -1,0 +1,110 @@
+{
+  "/": {
+    "width": 1920,
+    "height": 1281,
+    "variants": [
+      {
+        "src": "/optimized/bg-colnago-6861a32d0e76-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-colnago-6861a32d0e76-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-colnago-6861a32d0e76-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-colnago-6861a32d0e76-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/bg-colnago-6861a32d0e76-1920.webp",
+        "width": 1920
+      }
+    ],
+    "background": true
+  },
+  "/gear": {
+    "width": 7000,
+    "height": 3800,
+    "variants": [
+      {
+        "src": "/optimized/products-bike-cervelo-04ee38d7a0e7-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-bike-cervelo-04ee38d7a0e7-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-bike-cervelo-04ee38d7a0e7-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-bike-cervelo-04ee38d7a0e7-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/products-bike-cervelo-04ee38d7a0e7-1920.webp",
+        "width": 1920
+      }
+    ],
+    "background": false
+  },
+  "/support": {
+    "width": 2200,
+    "height": 1065,
+    "variants": [
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-1920.webp",
+        "width": 1920
+      }
+    ],
+    "background": true
+  },
+  "/account": {
+    "width": 2200,
+    "height": 1065,
+    "variants": [
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-1920.webp",
+        "width": 1920
+      }
+    ],
+    "background": true
+  }
+}

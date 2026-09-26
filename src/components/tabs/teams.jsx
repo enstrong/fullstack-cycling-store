@@ -1,5 +1,4 @@
-import '@/css/App.css'
-import '@/css/tabs/teams.css'
+import ResponsiveImage from "@/components/responsive-image.jsx";
 import UAE from '/team-logos/UAE_team_logo.png'
 import Visma from '/team-logos/Team_Visma_logo.png'
 import Sky from '/team-logos/Team_Sky_logo.jpg'
@@ -18,16 +17,16 @@ export default function Teams() {
       <div data-header-accent="yellow" className="section teams-section d-flex align-center">
         <div className="container d-flex align-center justify-space-between teams-section__group-logos">
           <div onClick={() => scrollToElement('uae')}>
-            <img src={UAE} alt="uae team logo" className="teams-section__logo teams-section__logo-uae"/>
+            <ResponsiveImage sizes="190px" loading="eager" src={UAE} alt="uae team logo" className="teams-section__logo teams-section__logo-uae"/>
           </div>
           <div onClick={() => scrollToElement('visma')}>
-            <img src={Visma} alt="team visma logo" className="teams-section__logo teams-section__logo-visma"/>
+            <ResponsiveImage sizes="190px" loading="eager" src={Visma} alt="team visma logo" className="teams-section__logo teams-section__logo-visma"/>
           </div>
           <div onClick={() => scrollToElement('sky')}>
-            <img src={Sky} alt="team sky logo" className="teams-section__logo teams-section__logo-sky"/>
+            <ResponsiveImage sizes="190px" loading="eager" src={Sky} alt="team sky logo" className="teams-section__logo teams-section__logo-sky"/>
           </div>
           <div onClick={() => scrollToElement('astana')}>
-            <img src={Astana} alt="astana team logo" className="teams-section__logo teams-section__logo-astana"/>
+            <ResponsiveImage sizes="190px" loading="eager" src={Astana} alt="astana team logo" className="teams-section__logo teams-section__logo-astana"/>
           </div>
         </div>
       </div>

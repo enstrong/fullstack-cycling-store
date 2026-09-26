@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { api, money } from "@/api";
 import { useAuth } from "@/auth";
-import "@/css/tabs/cart.css";
 import {
   countries,
   countryRules,

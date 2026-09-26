@@ -1,25 +1,32 @@
-import '@/css/App.css'
-import '@/css/scrollTop.css'
 import ArrowUp from '/icons/arrow-up.svg'
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const toggleVisibility = () => {
-      setIsVisible(window.scrollY > window.innerHeight);
+    let frame = 0;
+    let visible = false;
+    const update = () => {
+      frame = 0;
+      const next = window.scrollY > window.innerHeight;
+      if (next !== visible) { visible = next; setIsVisible(next); }
     };
-
-    window.addEventListener('scroll', toggleVisibility);
-
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
   }, []);
 
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
     });
   };
 

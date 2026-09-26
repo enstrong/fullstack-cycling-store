@@ -9,22 +9,26 @@ export default function SectionEntrances() {
     const content = document.querySelector(".route-content");
     if (!content) return;
     const elements = new Set();
+    const seen = new Set();
     const settle = (element) => {
+      if (element.dataset.entranceKey) seen.add(element.dataset.entranceKey);
       element.classList.remove("entrance-pending", "entrance-visible");
       element.classList.add("entrance-settled");
       observer.unobserve(element);
     };
     const reveal = (element) => {
       if (element.classList.contains("entrance-settled")) return;
+      if (motion.matches) return settle(element);
       element.classList.remove("entrance-pending");
       element.classList.add("entrance-visible");
+      if (element.dataset.entranceKey) seen.add(element.dataset.entranceKey);
       observer.unobserve(element);
     };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) reveal(entry.target);
       });
-    }, { threshold: 0, rootMargin: "0px 0px -64px 0px" });
+    }, { threshold: 0, rootMargin: "0px 0px -32px 0px" });
     const discover = () => {
       // Cards arrive after the API response and can be replaced by filters.
       elements.forEach((element) => {
@@ -36,13 +40,15 @@ export default function SectionEntrances() {
       content.querySelectorAll("[data-entrance]").forEach((element) => {
         if (elements.has(element)) return;
         elements.add(element);
-        if (motion.matches) return;
+        if (motion.matches || seen.has(element.dataset.entranceKey)) return settle(element);
         element.classList.add("entrance-pending");
         observer.observe(element);
       });
     };
     discover();
-    const mutations = new MutationObserver(discover);
+    const mutations = new MutationObserver((records) => {
+      if (records.some((record) => [...record.addedNodes, ...record.removedNodes].some((node) => node.nodeType === 1))) discover();
+    });
     mutations.observe(content, { childList: true, subtree: true });
     const onFocus = (event) => {
       const element = event.target.closest("[data-entrance]");

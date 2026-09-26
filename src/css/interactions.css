@@ -17,10 +17,8 @@
 .bike-shelf .rail-controls button span { font-size: 13px; font-weight: 700; }
 .bike-shelf .rail-controls button:last-child:not(:disabled) { background: var(--accent); border-color: var(--accent); color: #111; }
 .bike-shelf .rail-controls button:disabled { background: transparent; color: #999; border-color: #444; opacity: .45; }
-.bike-shelf .bike-rail { padding-top: 4px; scrollbar-color: var(--accent) #303030; }
-.bike-shelf .bike-rail::-webkit-scrollbar { height: 7px; }
-.bike-shelf .bike-rail::-webkit-scrollbar-track { background: #303030; border: none; }
-.bike-shelf .bike-rail::-webkit-scrollbar-thumb { background: var(--accent); }
+.bike-shelf .bike-rail { padding-top: 4px; scrollbar-width: none; }
+.bike-shelf .bike-rail::-webkit-scrollbar { display: none; }
 .bike-shelf .bike-rail .shop-card { flex-basis: 44%; }
 .bike-shelf .bike-rail .shop-card:only-child { flex-basis: calc(50% - 11px); }
 .bike-pagination { display: flex; justify-content: center; gap: 7px; margin-top: 8px; }
@@ -125,7 +123,7 @@
   box-shadow: 0 20px 80px #0008;
 }
 .product-explorer[open] { animation: section-entrance 220ms ease-out; }
-.product-explorer::backdrop { background: #000c; backdrop-filter: blur(5px); }
+.product-explorer::backdrop { background: #000d; }
 .explorer-heading {
   display: flex;
   align-items: center;
@@ -178,6 +176,7 @@
   .explorer-stage img { padding: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .mobile-nav, .burger-icon, .burger-icon span, .teams-section__logo, .bikes-section__button { transition: none; }
   .entrance-pending { opacity: 1; }
   .entrance-visible,
   .product-grid > .entrance-visible,

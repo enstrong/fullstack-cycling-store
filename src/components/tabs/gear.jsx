@@ -1,21 +1,20 @@
+import ResponsiveImage from "@/components/responsive-image.jsx";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useComparison } from "@/comparison-context";
 import ProductFacts from "@/components/product-facts.jsx";
 import ProductExplorer from "@/components/product-explorer.jsx";
 import BikeShelf from "@/components/bike-shelf.jsx";
-import "@/css/tabs/compare.css";
 import { api, money } from "@/api";
-import "@/css/tabs/gear.css";
 function ProductCard({ product, category, add, busy, blocked, added, explore }) {
   const { ids, toggle } = useComparison();
   const selected = ids.includes(product.product_id);
   return (
-    <article data-entrance={product.section !== "bikes" ? "card" : undefined} className={`shop-card ${category === "Bikes" ? "bike-card" : ""}`}>
+    <article data-entrance-key={`product-${product.product_id}`} data-entrance={product.section !== "bikes" ? "card" : undefined} className={`shop-card ${category === "Bikes" ? "bike-card" : ""}`}>
       <button type="button" className="shop-card-visual product-image-trigger" data-header-surface="light"
         onClick={() => explore(product)} aria-label={`Explore ${product.name} image`} aria-haspopup="dialog">
         <span className="product-tag">{category}</span>
-        <img src={product.icon} alt={product.name} loading="lazy" />
+        <ResponsiveImage src={product.icon} alt={product.name} sizes={category === "Bikes" ? "(max-width: 600px) 86vw, (max-width: 900px) 65vw, 44vw" : "(max-width: 600px) 92vw, (max-width: 900px) 46vw, 30vw"} />
         <span className="image-explore-hint" aria-hidden="true">View image ↗</span>
         <span className="stock-tag">
           {product.stock_quantity > 0 ? "Ready to ride" : "Sold out"}
@@ -187,8 +186,11 @@ export default function Gear() {
           </a>
         </div>
         <div className="shop-hero-art" data-header-surface="light">
-          <img
+          <ResponsiveImage
             src="/products/bike_cervelo.png"
+            sizes="(max-width: 700px) 92vw, 50vw"
+            loading="eager"
+            fetchPriority="high"
             alt="Cervélo R5 road bike in side profile"
           />
           <div className="hero-art-caption">

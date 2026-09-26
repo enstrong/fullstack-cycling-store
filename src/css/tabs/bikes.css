@@ -7,7 +7,7 @@
   background: linear-gradient(
     rgba(0, 0, 0, 0.5), 
     rgba(0, 0, 0, 0.5)
-  ), url(/bg/colnago.webp) no-repeat;
+  ), var(--image-colnago) no-repeat;
   background-size: cover;
   background-position: center 0%;
 }
@@ -16,13 +16,13 @@
   background: linear-gradient(
     rgba(0, 0, 0, 0.5), 
     rgba(0, 0, 0, 0.5)
-  ), url(/bg/cervelo.webp) no-repeat;
+  ), var(--image-cervelo) no-repeat;
   background-size: cover;
   background-position: center 65%;
 }
 
 .pinarello-bg {
-  background:  url(/bg/pinarello.jpg) no-repeat;
+  background:  var(--image-pinarello) no-repeat;
   background-size: cover;
   background-position: center 65%;
   padding-bottom: 20px;
@@ -32,7 +32,7 @@
   background: linear-gradient(
     rgba(0, 0, 0, 0.5), 
     rgba(0, 0, 0, 0.5)
-  ), url(/bg/sworks.webp) no-repeat;
+  ), var(--image-sworks) no-repeat;
   background-size: cover;
   background-position: center 65%;
 }
@@ -59,7 +59,7 @@
   padding: 15px;
   margin: 20px auto;
   cursor: pointer;
-  transition: transform .5s ease-in-out, .8s  ease;
+  transition: transform .5s ease-in-out, background-color .3s ease, border-color .3s ease, color .3s ease;
 }
 
 .bikes-section__button:hover {

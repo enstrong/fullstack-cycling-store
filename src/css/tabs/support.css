@@ -1,7 +1,7 @@
 .support-page {
   background:
     linear-gradient(110deg, #10130fec, #11180fde),
-    url("/bg/cervelo-support.jpg") center/cover;
+    var(--image-cervelo-support) center/cover;
   min-height: 85vh;
   padding-bottom: 110px;
 }

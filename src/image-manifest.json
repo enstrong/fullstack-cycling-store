@@ -1,0 +1,810 @@
+{
+  "/products/bike_cervelo.png": {
+    "width": 7000,
+    "height": 3800,
+    "variants": [
+      {
+        "src": "/optimized/products-bike-cervelo-04ee38d7a0e7-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-bike-cervelo-04ee38d7a0e7-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-bike-cervelo-04ee38d7a0e7-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-bike-cervelo-04ee38d7a0e7-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/products-bike-cervelo-04ee38d7a0e7-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/products/bike_colnago.jpg": {
+    "width": 1600,
+    "height": 1066,
+    "variants": [
+      {
+        "src": "/optimized/products-bike-colnago-c529c392ccc3-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-bike-colnago-c529c392ccc3-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-bike-colnago-c529c392ccc3-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-bike-colnago-c529c392ccc3-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/products-bike-colnago-c529c392ccc3-1600.webp",
+        "width": 1600
+      }
+    ]
+  },
+  "/products/bike_pinarello.png": {
+    "width": 1254,
+    "height": 810,
+    "variants": [
+      {
+        "src": "/optimized/products-bike-pinarello-5c70b6536b38-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-bike-pinarello-5c70b6536b38-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-bike-pinarello-5c70b6536b38-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-bike-pinarello-5c70b6536b38-1254.webp",
+        "width": 1254
+      }
+    ]
+  },
+  "/products/bike_sworks.webp": {
+    "width": 4800,
+    "height": 2700,
+    "variants": [
+      {
+        "src": "/optimized/products-bike-sworks-e230ae8a54b4-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-bike-sworks-e230ae8a54b4-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-bike-sworks-e230ae8a54b4-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-bike-sworks-e230ae8a54b4-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/products-bike-sworks-e230ae8a54b4-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/products/bottle_TDF.png": {
+    "width": 380,
+    "height": 540,
+    "variants": [
+      {
+        "src": "/optimized/products-bottle-TDF-ad1b5942eebc-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-bottle-TDF-ad1b5942eebc-380.webp",
+        "width": 380
+      }
+    ]
+  },
+  "/products/bottle_cage_tacx.jpg": {
+    "width": 500,
+    "height": 500,
+    "variants": [
+      {
+        "src": "/optimized/products-bottle-cage-tacx-8aa08a79d917-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-bottle-cage-tacx-8aa08a79d917-500.webp",
+        "width": 500
+      }
+    ]
+  },
+  "/products/bottle_camelbak.webp": {
+    "width": 650,
+    "height": 650,
+    "variants": [
+      {
+        "src": "/optimized/products-bottle-camelbak-f7e93cd487f7-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-bottle-camelbak-f7e93cd487f7-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-bottle-camelbak-f7e93cd487f7-650.webp",
+        "width": 650
+      }
+    ]
+  },
+  "/products/glasses_POC.jpg": {
+    "width": 1410,
+    "height": 1410,
+    "variants": [
+      {
+        "src": "/optimized/products-glasses-POC-382051d08fc1-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-glasses-POC-382051d08fc1-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-glasses-POC-382051d08fc1-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-glasses-POC-382051d08fc1-1410.webp",
+        "width": 1410
+      }
+    ]
+  },
+  "/products/glasses_oakley.png": {
+    "width": 932,
+    "height": 590,
+    "variants": [
+      {
+        "src": "/optimized/products-glasses-oakley-101c40fb3746-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-glasses-oakley-101c40fb3746-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-glasses-oakley-101c40fb3746-932.webp",
+        "width": 932
+      }
+    ]
+  },
+  "/products/glasses_sagan.png": {
+    "width": 1000,
+    "height": 1000,
+    "variants": [
+      {
+        "src": "/optimized/products-glasses-sagan-4c4f653dacb6-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-glasses-sagan-4c4f653dacb6-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-glasses-sagan-4c4f653dacb6-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-glasses-sagan-4c4f653dacb6-1000.webp",
+        "width": 1000
+      }
+    ]
+  },
+  "/products/gloves_TDF.jpg": {
+    "width": 960,
+    "height": 1141,
+    "variants": [
+      {
+        "src": "/optimized/products-gloves-TDF-832540b11edd-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-gloves-TDF-832540b11edd-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-gloves-TDF-832540b11edd-960.webp",
+        "width": 960
+      }
+    ]
+  },
+  "/products/gloves_rapha.webp": {
+    "width": 1024,
+    "height": 1024,
+    "variants": [
+      {
+        "src": "/optimized/products-gloves-rapha-fd1a8addbc44-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-gloves-rapha-fd1a8addbc44-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-gloves-rapha-fd1a8addbc44-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-gloves-rapha-fd1a8addbc44-1024.webp",
+        "width": 1024
+      }
+    ]
+  },
+  "/products/gloves_specialized.webp": {
+    "width": 4800,
+    "height": 2700,
+    "variants": [
+      {
+        "src": "/optimized/products-gloves-specialized-66ccb3d3f9c5-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-gloves-specialized-66ccb3d3f9c5-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-gloves-specialized-66ccb3d3f9c5-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-gloves-specialized-66ccb3d3f9c5-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/products-gloves-specialized-66ccb3d3f9c5-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/products/helmet_evenepoel_TT.webp": {
+    "width": 4800,
+    "height": 2700,
+    "variants": [
+      {
+        "src": "/optimized/products-helmet-evenepoel-TT-f9aa78034e67-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-helmet-evenepoel-TT-f9aa78034e67-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-helmet-evenepoel-TT-f9aa78034e67-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-helmet-evenepoel-TT-f9aa78034e67-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/products-helmet-evenepoel-TT-f9aa78034e67-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/products/helmet_pogacar.png": {
+    "width": 1200,
+    "height": 980,
+    "variants": [
+      {
+        "src": "/optimized/products-helmet-pogacar-1563468d445a-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-helmet-pogacar-1563468d445a-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-helmet-pogacar-1563468d445a-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-helmet-pogacar-1563468d445a-1200.webp",
+        "width": 1200
+      }
+    ]
+  },
+  "/products/helmet_teamvisma.webp": {
+    "width": 1439,
+    "height": 1439,
+    "variants": [
+      {
+        "src": "/optimized/products-helmet-teamvisma-ff8464cea8e3-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-helmet-teamvisma-ff8464cea8e3-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-helmet-teamvisma-ff8464cea8e3-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-helmet-teamvisma-ff8464cea8e3-1439.webp",
+        "width": 1439
+      }
+    ]
+  },
+  "/products/jersey_INEOS.jpg": {
+    "width": 1920,
+    "height": 2208,
+    "variants": [
+      {
+        "src": "/optimized/products-jersey-INEOS-d65e53bd265c-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-jersey-INEOS-d65e53bd265c-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-jersey-INEOS-d65e53bd265c-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-jersey-INEOS-d65e53bd265c-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/products-jersey-INEOS-d65e53bd265c-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/products/jersey_UAE.jpg": {
+    "width": 592,
+    "height": 597,
+    "variants": [
+      {
+        "src": "/optimized/products-jersey-UAE-58b06486a8aa-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-jersey-UAE-58b06486a8aa-592.webp",
+        "width": 592
+      }
+    ]
+  },
+  "/products/jersey_yellow_TDF.jpg": {
+    "width": 900,
+    "height": 900,
+    "variants": [
+      {
+        "src": "/optimized/products-jersey-yellow-TDF-7c14361b9e34-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-jersey-yellow-TDF-7c14361b9e34-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-jersey-yellow-TDF-7c14361b9e34-900.webp",
+        "width": 900
+      }
+    ]
+  },
+  "/products/shoes_fizik.jpg": {
+    "width": 1000,
+    "height": 1000,
+    "variants": [
+      {
+        "src": "/optimized/products-shoes-fizik-9f4ffe897e50-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-shoes-fizik-9f4ffe897e50-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-shoes-fizik-9f4ffe897e50-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-shoes-fizik-9f4ffe897e50-1000.webp",
+        "width": 1000
+      }
+    ]
+  },
+  "/products/shoes_shimano.jpg": {
+    "width": 1400,
+    "height": 1400,
+    "variants": [
+      {
+        "src": "/optimized/products-shoes-shimano-af5f82ba7e5c-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-shoes-shimano-af5f82ba7e5c-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/products-shoes-shimano-af5f82ba7e5c-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/products-shoes-shimano-af5f82ba7e5c-1400.webp",
+        "width": 1400
+      }
+    ]
+  },
+  "/products/shoes_sidi.jpg": {
+    "width": 488,
+    "height": 520,
+    "variants": [
+      {
+        "src": "/optimized/products-shoes-sidi-49a387adde46-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/products-shoes-sidi-49a387adde46-488.webp",
+        "width": 488
+      }
+    ]
+  },
+  "/bg/Astana_Giro_dItalia.jpg": {
+    "width": 1280,
+    "height": 960,
+    "variants": [
+      {
+        "src": "/optimized/bg-Astana-Giro-dItalia-7a39efd93538-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-Astana-Giro-dItalia-7a39efd93538-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-Astana-Giro-dItalia-7a39efd93538-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-Astana-Giro-dItalia-7a39efd93538-1280.webp",
+        "width": 1280
+      }
+    ]
+  },
+  "/bg/Astana_TdF2014.jpg": {
+    "width": 1200,
+    "height": 800,
+    "variants": [
+      {
+        "src": "/optimized/bg-Astana-TdF2014-895b37b3660e-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-Astana-TdF2014-895b37b3660e-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-Astana-TdF2014-895b37b3660e-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-Astana-TdF2014-895b37b3660e-1200.webp",
+        "width": 1200
+      }
+    ]
+  },
+  "/bg/Astana_TdF2014_Arc.jpg": {
+    "width": 1200,
+    "height": 898,
+    "variants": [
+      {
+        "src": "/optimized/bg-Astana-TdF2014-Arc-3f1248defd30-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-Astana-TdF2014-Arc-3f1248defd30-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-Astana-TdF2014-Arc-3f1248defd30-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-Astana-TdF2014-Arc-3f1248defd30-1200.webp",
+        "width": 1200
+      }
+    ]
+  },
+  "/bg/Team_Sky.jpg": {
+    "width": 2048,
+    "height": 1152,
+    "variants": [
+      {
+        "src": "/optimized/bg-Team-Sky-dd45b12756eb-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-Team-Sky-dd45b12756eb-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-Team-Sky-dd45b12756eb-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-Team-Sky-dd45b12756eb-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/bg-Team-Sky-dd45b12756eb-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/bg/Team_UAE.jpg": {
+    "width": 2560,
+    "height": 1707,
+    "variants": [
+      {
+        "src": "/optimized/bg-Team-UAE-702ca87ed2e2-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-Team-UAE-702ca87ed2e2-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-Team-UAE-702ca87ed2e2-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-Team-UAE-702ca87ed2e2-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/bg-Team-UAE-702ca87ed2e2-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/bg/Team_Visma.jpg": {
+    "width": 1439,
+    "height": 1439,
+    "variants": [
+      {
+        "src": "/optimized/bg-Team-Visma-40fa9b3c7f55-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-Team-Visma-40fa9b3c7f55-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-Team-Visma-40fa9b3c7f55-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-Team-Visma-40fa9b3c7f55-1439.webp",
+        "width": 1439
+      }
+    ]
+  },
+  "/bg/cervelo-support.jpg": {
+    "width": 2200,
+    "height": 1065,
+    "variants": [
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/bg-cervelo-support-f1940b603e2c-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/bg/cervelo.webp": {
+    "width": 1500,
+    "height": 791,
+    "variants": [
+      {
+        "src": "/optimized/bg-cervelo-732f26be69c4-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-cervelo-732f26be69c4-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-cervelo-732f26be69c4-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-cervelo-732f26be69c4-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/bg-cervelo-732f26be69c4-1500.webp",
+        "width": 1500
+      }
+    ]
+  },
+  "/bg/colnago.webp": {
+    "width": 1920,
+    "height": 1281,
+    "variants": [
+      {
+        "src": "/optimized/bg-colnago-6861a32d0e76-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-colnago-6861a32d0e76-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-colnago-6861a32d0e76-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-colnago-6861a32d0e76-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/bg-colnago-6861a32d0e76-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/bg/pinarello.jpg": {
+    "width": 3840,
+    "height": 2160,
+    "variants": [
+      {
+        "src": "/optimized/bg-pinarello-ade4b6454f67-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-pinarello-ade4b6454f67-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-pinarello-ade4b6454f67-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-pinarello-ade4b6454f67-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/bg-pinarello-ade4b6454f67-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/bg/sworks.webp": {
+    "width": 2880,
+    "height": 1620,
+    "variants": [
+      {
+        "src": "/optimized/bg-sworks-a87052d772f0-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/bg-sworks-a87052d772f0-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/bg-sworks-a87052d772f0-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/bg-sworks-a87052d772f0-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/bg-sworks-a87052d772f0-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/team-logos/Astana_Team_Logo.jpg": {
+    "width": 2048,
+    "height": 2048,
+    "variants": [
+      {
+        "src": "/optimized/team-logos-Astana-Team-Logo-a2256b7729a4-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/team-logos-Astana-Team-Logo-a2256b7729a4-640.webp",
+        "width": 640
+      },
+      {
+        "src": "/optimized/team-logos-Astana-Team-Logo-a2256b7729a4-960.webp",
+        "width": 960
+      },
+      {
+        "src": "/optimized/team-logos-Astana-Team-Logo-a2256b7729a4-1440.webp",
+        "width": 1440
+      },
+      {
+        "src": "/optimized/team-logos-Astana-Team-Logo-a2256b7729a4-1920.webp",
+        "width": 1920
+      }
+    ]
+  },
+  "/team-logos/Team_Sky_logo.jpg": {
+    "width": 612,
+    "height": 612,
+    "variants": [
+      {
+        "src": "/optimized/team-logos-Team-Sky-logo-5f789351f980-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/team-logos-Team-Sky-logo-5f789351f980-612.webp",
+        "width": 612
+      }
+    ]
+  },
+  "/team-logos/Team_Visma_logo.png": {
+    "width": 373,
+    "height": 425,
+    "variants": [
+      {
+        "src": "/optimized/team-logos-Team-Visma-logo-5565c807dc2c-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/team-logos-Team-Visma-logo-5565c807dc2c-373.webp",
+        "width": 373
+      }
+    ]
+  },
+  "/team-logos/Team_Visma_logo_not_transparent.png": {
+    "width": 373,
+    "height": 425,
+    "variants": [
+      {
+        "src": "/optimized/team-logos-Team-Visma-logo-not-transparent-5565c807dc2c-320.webp",
+        "width": 320
+      },
+      {
+        "src": "/optimized/team-logos-Team-Visma-logo-not-transparent-5565c807dc2c-373.webp",
+        "width": 373
+      }
+    ]
+  },
+  "/team-logos/UAE_team_logo.png": {
+    "width": 226,
+    "height": 300,
+    "variants": [
+      {
+        "src": "/optimized/team-logos-UAE-team-logo-0cae1483f0e2-226.webp",
+        "width": 226
+      }
+    ]
+  }
+}

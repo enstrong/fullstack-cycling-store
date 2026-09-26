@@ -9,59 +9,72 @@ export default function useHeaderTheme(pathname, headerRef) {
     const content = document.querySelector(".route-content");
     const header = headerRef.current;
     if (!content || !header) return;
-
+    let observers = [];
     let frame = 0;
-    let sections = [];
-    let lightSurfaces = [];
-    const update = () => {
-      frame = 0;
-      const bounds = header.getBoundingClientRect();
-      // Include the scroll padding used by team links so their destination
-      // receives its colour as soon as it settles just below the header.
-      const probe = bounds.bottom + 24;
-      const section = sections.find((element) => {
-        const rect = element.getBoundingClientRect();
-        return rect.top <= probe && rect.bottom > probe;
-      });
-      const candidate = section?.dataset.headerAccent;
-      const accent = ACCENTS.has(candidate) ? candidate : "yellow";
-      const contrast = lightSurfaces.some((element) => {
-        const rect = element.getBoundingClientRect();
-        return rect.top < bounds.bottom - 12 && rect.bottom > bounds.top + 12
-          && rect.left < bounds.right && rect.right > bounds.left;
-      });
-      setTheme((previous) => previous.pathname === pathname
-        && previous.accent === accent && previous.contrast === contrast
-        ? previous : { pathname, accent, contrast });
-    };
-    const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
+    let activeSection = null;
+    let contrast = false;
     const refresh = () => {
-      sections = pathname === "/" || pathname === "/teams"
+      frame = 0;
+      observers.forEach((observer) => observer.disconnect());
+      const bounds = header.getBoundingClientRect();
+      const sections = pathname === "/" || pathname === "/teams"
         ? [...content.querySelectorAll("[data-header-accent]")] : [];
-      lightSurfaces = [...content.querySelectorAll('[data-header-surface="light"]')];
-      schedule();
+      const surfaces = [...content.querySelectorAll('[data-header-surface="light"]')];
+      const sectionHits = new Set();
+      const innerHits = new Set();
+      const outerHits = new Set();
+      const publish = () => {
+        // Keep the current section while it still crosses the narrow probe band.
+        if (!sectionHits.has(activeSection)) activeSection = sections.find((element) => sectionHits.has(element));
+        const candidate = activeSection?.dataset.headerAccent;
+        const accent = ACCENTS.has(candidate) ? candidate : "yellow";
+        setTheme((previous) => previous.pathname === pathname && previous.accent === accent && previous.contrast === contrast
+          ? previous : { pathname, accent, contrast });
+      };
+      const observeBand = (targets, top, bottom, hits, update) => {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(({ target, isIntersecting }) => {
+            if (isIntersecting) hits.add(target); else hits.delete(target);
+          });
+          update();
+          publish();
+        }, { rootMargin: `${-top}px 0px ${bottom - window.innerHeight}px 0px`, threshold: 0 });
+        targets.forEach((target) => observer.observe(target));
+        return observer;
+      };
+      observers = [
+        observeBand(sections, bounds.bottom + 20, bounds.bottom + 28, sectionHits, () => {}),
+        // Enter on a clear overlap; leave only after passing the larger band.
+        observeBand(surfaces, bounds.top + 12, bounds.bottom - 12, innerHits, () => {
+          if (innerHits.size) contrast = true;
+        }),
+        observeBand(surfaces, bounds.top, bounds.bottom + 6, outerHits, () => {
+          if (!outerHits.size) contrast = false;
+        }),
+      ];
+      if (!surfaces.length) contrast = false;
+      if (!sections.length) activeSection = null;
+      publish();
     };
-
-    refresh();
-    // Products arrive asynchronously; refresh targets without polling the DOM.
-    const mutationObserver = new MutationObserver(refresh);
-    mutationObserver.observe(content, { childList: true, subtree: true });
-    const resizeObserver = new ResizeObserver(schedule);
-    resizeObserver.observe(content);
-    resizeObserver.observe(header);
-    window.addEventListener("scroll", schedule, { passive: true, capture: true });
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(refresh); };
+    const mutations = new MutationObserver((records) => {
+      if (records.some((record) => [...record.addedNodes, ...record.removedNodes].some((node) =>
+        node.nodeType === 1 && (node.matches('[data-header-accent], [data-header-surface]') ||
+          node.querySelector('[data-header-accent], [data-header-surface]'))))) schedule();
+    });
+    mutations.observe(content, { childList: true, subtree: true });
+    const resize = new ResizeObserver(schedule);
+    resize.observe(header);
     window.addEventListener("resize", schedule);
+    refresh();
     return () => {
       cancelAnimationFrame(frame);
-      mutationObserver.disconnect();
-      resizeObserver.disconnect();
-      window.removeEventListener("scroll", schedule, true);
+      observers.forEach((observer) => observer.disconnect());
+      mutations.disconnect();
+      resize.disconnect();
       window.removeEventListener("resize", schedule);
     };
   }, [pathname, headerRef]);
 
-  // Route changes never carry a bike/team colour onto Shop or Support.
   return theme.pathname === pathname ? theme : { accent: "yellow", contrast: false };
 }

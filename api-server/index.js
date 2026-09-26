@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const compression = require("compression");
+const { existsSync } = require("node:fs");
 const helmet = require("helmet");
 const { rateLimit } = require("express-rate-limit");
 const path = require("node:path");
@@ -28,6 +30,27 @@ function createApp(pool, config = {}) {
         process.env.NODE_ENV === "production" ? undefined : false,
     }),
   );
+  // Compress public catalog/static responses only; personalized responses stay uncompressed.
+  app.use(compression({
+    threshold: 1024,
+    filter: (req, res) => res.statusCode < 400 &&
+      (!req.path.startsWith("/api") || ["/api/products", "/api/categories"].includes(req.path)) &&
+      ["GET", "HEAD"].includes(req.method) && compression.filter(req, res),
+  }));
+  const frontendDirectory = path.join(__dirname, "../dist");
+  const serveFrontend = config.serveFrontend ??
+    (process.env.SERVE_FRONTEND === undefined ? process.env.NODE_ENV === "production" : process.env.SERVE_FRONTEND === "true");
+  const frontendAvailable = serveFrontend && existsSync(path.join(frontendDirectory, "index.html"));
+  if (frontendAvailable) {
+    app.use(express.static(frontendDirectory, {
+      index: false,
+      setHeaders: (res, filename) => {
+        const relative = path.relative(frontendDirectory, filename).split(path.sep).join("/");
+        res.set("Cache-Control", relative.startsWith("assets/") || relative.startsWith("optimized/")
+          ? "public, max-age=31536000, immutable" : "public, max-age=0, must-revalidate");
+      },
+    }));
+  }
   app.use(
     "/api",
     rateLimit({
@@ -96,12 +119,12 @@ function createApp(pool, config = {}) {
       .json({ message: "Administrator access required." });
   }
   app.get("/api/categories", async (req, res) =>
-    res.json(
+    res.set("Cache-Control", "public, max-age=0, must-revalidate").json(
       (await pool.query("SELECT * FROM categories ORDER BY category_id")).rows,
     ),
   );
   app.get("/api/products", async (req, res) =>
-    res.json(
+    res.set("Cache-Control", "public, max-age=0, must-revalidate").json(
       (
         await pool.query(
           "SELECT p.*,c.section FROM products p JOIN categories c USING(category_id) ORDER BY p.product_id",
@@ -356,6 +379,13 @@ function createApp(pool, config = {}) {
   app.use("/api", (req, res) =>
     res.status(404).json({ message: "Endpoint not found." }),
   );
+  if (frontendAvailable) {
+    const pages = new Set(["/", "/teams", "/gear", "/support", "/cart", "/cart/checkout", "/compare", "/account", "/admin"]);
+    app.get(/.*/, (req, res, next) => {
+      if (!pages.has(req.path.replace(/\/$/, "") || "/")) return next();
+      res.set("Cache-Control", "no-cache").sendFile(path.join(frontendDirectory, "index.html"));
+    });
+  }
   app.use((error, req, res, next) => {
     if (res.headersSent) return next(error);
     const status =
@@ -366,7 +396,7 @@ function createApp(pool, config = {}) {
       console.error("API request failed", {
         code: error.code || "internal_error",
       });
-    res.status(status).json({
+    res.set("Cache-Control", "no-store").status(status).json({
       message:
         error.type === "entity.parse.failed"
           ? "Invalid JSON body."

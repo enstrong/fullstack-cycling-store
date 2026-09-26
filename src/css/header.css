@@ -93,7 +93,7 @@
   width: 30px;
   height: 24px;
   position: relative;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .burger-icon span {
@@ -139,19 +139,23 @@
 .mobile-nav {
   position: fixed;
   top: 0;
-  right: -100%;
+  right: 0;
+  transform: translateX(100%);
+  visibility: hidden;
   width: 70%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.9);
   z-index: 100;
-  transition: right 0.3s ease;
+  transition: transform 0.3s ease, visibility 0s linear 0.3s;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .mobile-nav.open {
-  right: 0;
+  transform: translateX(0);
+  visibility: visible;
+  transition-delay: 0s;
 }
 
 .mobile-nav-links {

@@ -1,8 +1,8 @@
+import ResponsiveImage from "@/components/responsive-image.jsx";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/auth";
 import { api, API_BASE, money } from "@/api";
-import "@/css/tabs/account.css";
 function GoogleLogo() {
   return (
     <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
@@ -353,7 +353,8 @@ function OrderItemImage({ src, name }) {
   return (
     <span className="history-item-image">
       {src && !failed ? (
-        <img
+        <ResponsiveImage
+          sizes="80px"
           src={src}
           alt={name || "Ordered product"}
           loading="lazy"

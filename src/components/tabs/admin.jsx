@@ -1,11 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "@/auth";
 import { useState, useEffect } from "react";
-import "@/css/App.css";
-import "@/css/tabs/teams.css";
-import "@/css/tabs/admin.css";
-import "@/css/tabs/account.css";
-import { api, API_BASE } from "@/api";
+import { api, API_BASE, invalidateCatalog } from "@/api";
 
 export default function Admin() {
   const [products, setProducts] = useState([]);
@@ -32,7 +28,7 @@ export default function Admin() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`${API_BASE}/api/products`);
+      const response = await fetch(`${API_BASE}/api/products`, { cache: "no-store" });
       if (!response.ok) throw new Error("Failed to fetch products");
       const data = await response.json();
       const sortedProducts = data.sort((a, b) => a.product_id - b.product_id);
@@ -44,7 +40,7 @@ export default function Admin() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${API_BASE}/api/categories`);
+      const response = await fetch(`${API_BASE}/api/categories`, { cache: "no-store" });
       if (!response.ok) throw new Error("Failed to fetch categories");
       const data = await response.json();
       setCategories(data);
@@ -91,6 +87,7 @@ export default function Admin() {
         throw new Error(errorData.message || "Failed to create product");
       }
 
+      invalidateCatalog();
       await fetchProducts();
       resetForm();
       alert("Product created successfully!");
@@ -118,6 +115,7 @@ export default function Admin() {
         throw new Error(errorData.message || "Failed to update product");
       }
 
+      invalidateCatalog();
       await fetchProducts();
       resetForm();
       alert("Product updated successfully!");
@@ -142,6 +140,7 @@ export default function Admin() {
         throw new Error(errorData.message || "Failed to delete product");
       }
 
+      invalidateCatalog();
       await fetchProducts();
       if (selectedProduct && selectedProduct.product_id === productId) {
         resetForm();

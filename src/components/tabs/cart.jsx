@@ -1,8 +1,8 @@
+import ResponsiveImage from "@/components/responsive-image.jsx";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, money } from "@/api";
 import { useAuth } from "@/auth";
-import "@/css/tabs/cart.css";
 export default function Cart() {
   const { user } = useAuth();
   const [items, setItems] = useState([]);
@@ -82,7 +82,7 @@ export default function Cart() {
                 {items.map((item) => (
                   <article className="cart-line" key={item.cart_item_id}>
                     <div className="cart-photo">
-                      <img src={item.icon} alt={item.name} />
+                      <ResponsiveImage sizes="130px" src={item.icon} alt={item.name} />
                     </div>
                     <div className="cart-line-info">
                       <h2>{item.name}</h2>

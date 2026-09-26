@@ -1,9 +1,7 @@
-import '@/css/App.css'
-import '@/css/tabs/bikes.css';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { api, API_BASE } from '@/api';
+import { api } from '@/api';
 
 export default function Bikes() {
   const [products, setProducts] = useState([]);
@@ -20,11 +18,7 @@ export default function Bikes() {
   useEffect(() => {
     const fetchBikes = async () => {
       try {
-        const response = await fetch(`${API_BASE}/api/products`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
-        const data = await response.json();
+        const data = await api("/products");
         const bikeProducts = data.filter(product => product.category_id === 7);
         setProducts(bikeProducts);
       } catch (error) {

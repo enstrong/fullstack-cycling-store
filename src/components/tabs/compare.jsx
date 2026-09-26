@@ -1,3 +1,4 @@
+import ResponsiveImage from "@/components/responsive-image.jsx";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, money } from "@/api";
@@ -11,7 +12,6 @@ import {
   rankSpec,
   specDefinitions,
 } from "../../../shared/comparison.mjs";
-import "@/css/tabs/compare.css";
 
 export default function Compare() {
   const { ids, toggle, clear, setIds } = useComparison();
@@ -152,7 +152,7 @@ export default function Compare() {
                     aria-pressed={ids.includes(p.product_id)}
                     disabled={!ids.includes(p.product_id) && ids.length >= 4}
                   >
-                    <img src={p.icon} alt="" loading="lazy" />
+                    <ResponsiveImage sizes="90px" src={p.icon} alt="" loading="lazy" />
                     <span>
                       <strong>{p.name}</strong>
                       <small>{money(p.price)}</small>
@@ -247,7 +247,7 @@ export default function Compare() {
                               >
                                 ×
                               </button>
-                              <img src={p.icon} alt={p.name} />
+                              <ResponsiveImage sizes="260px" src={p.icon} alt={p.name} />
                               <span className="eyebrow">
                                 {comparisonGroups.find(
                                   ([v]) => v === groupFor(p),

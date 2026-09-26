@@ -32,7 +32,7 @@ export default defineConfig({
     strictPort: true,
     proxy: { "/api": "http://127.0.0.1:5001" },
   },
-  preview: { headers: { ...headers, "Content-Security-Policy": csp(false) } },
+  preview: { headers: { ...headers, "Content-Security-Policy": csp(false) }, proxy: { "/api": "http://127.0.0.1:5001" } },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

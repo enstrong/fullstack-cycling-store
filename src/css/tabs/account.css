@@ -14,7 +14,7 @@
   padding: 60px 45px;
   background:
     linear-gradient(180deg, #12170cd9, #17201280),
-    url("/bg/cervelo-support.jpg") center/cover;
+    var(--image-cervelo-support) center/cover;
   display: flex;
   flex-direction: column;
   min-height: 620px;

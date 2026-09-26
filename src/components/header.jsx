@@ -5,8 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import TourLogo from "@/components/tdf-logo.jsx";
 import useHeaderTheme from "@/use-header-theme";
-import "@/css/App.css";
-import "@/css/header.css";
 
 function CartIcon() {
   return (
