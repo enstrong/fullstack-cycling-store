@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { api, money } from "@/api";
 import { useAuth } from "@/auth";
@@ -8,7 +8,15 @@ import {
   validateShipping,
 } from "../../../shared/shipping.mjs";
 export default function Checkout() {
-  const { user } = useAuth();
+  const { user, demo } = useAuth();
+  const formRef = useRef(null);
+  function fillExample() {
+    setCountry("US");
+    setFields({});
+    for (const [name, value] of Object.entries({ first_name: "Demo", last_name: "Rider", region: "California", city: "Beverly Hills", street: "123 Example Street", postal_code: "90210" })) {
+      formRef.current.elements.namedItem(name).value = value;
+    }
+  }
   const [items, setItems] = useState(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -60,7 +68,7 @@ export default function Checkout() {
           <span className="eyebrow">ORDER #{order.order_id}</span>
           <h1>You’re ready to roll.</h1>
           <p className="muted">
-            Your order has been placed. Confirmed total:{" "}
+            {demo ? "Your demo order has been saved. Nothing will be charged or shipped. Total:" : "Your order has been placed. Confirmed total:"}{" "}
             <strong>{money(order.total_price)}</strong>.
           </p>
           <Link className="primary-button" to="/account">
@@ -96,11 +104,13 @@ export default function Checkout() {
         ) : (
           <div className="cart-layout">
             <form
+              ref={formRef}
               className="checkout-form account-form"
               onSubmit={submit}
               noValidate
             >
               <h2>Where are we heading?</h2>
+              {demo && <><p className="muted">This is a demo order. Nothing will be charged or shipped. Use fictional details.</p><button type="button" className="text-link demo-fill" onClick={fillExample}>Fill example shipping details</button></>}
               <p className="muted">Signed in as {user.email}</p>
               <div className="shipping-fields">
                 {[
@@ -228,7 +238,7 @@ export default function Checkout() {
                 className="primary-button"
                 disabled={busy || !items?.length}
               >
-                {busy ? "Placing your order…" : "Place order →"}
+                {busy ? "Placing your order…" : demo ? "Place demo order →" : "Place order →"}
               </button>
             </form>
             <aside className="order-summary">

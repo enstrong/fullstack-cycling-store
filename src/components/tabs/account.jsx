@@ -26,7 +26,7 @@ function GoogleLogo() {
   );
 }
 export default function Account() {
-  const { user, setUser, googleAvailable, logout } = useAuth();
+  const { demo, user, setUser, googleAvailable, logout } = useAuth();
   const [params] = useSearchParams();
   const next =
     params.get("next") === "/cart/checkout" ? "/cart/checkout" : "/account";
@@ -99,7 +99,7 @@ export default function Account() {
               </h2>
               <p className="muted">{user.email}</p>
               <p className="account-caption">
-                Your cart stays with your account, wherever you sign in.
+                {demo ? "Your private demo saves your cart and orders for 24 hours. Example orders are labeled below." : "Your cart stays with your account, wherever you sign in."}
               </p>
               <Link className="primary-button" to="/cart">
                 View your cart <span>↗</span>
@@ -114,7 +114,7 @@ export default function Account() {
                 disabled={busy}
                 onClick={signOut}
               >
-                Sign out
+                {demo ? "Reset demo" : "Sign out"}
               </button>
             </>
           ) : (

@@ -1,0 +1,65 @@
+name: cycling-demo
+x-logging: &logging
+  driver: json-file
+  options: {max-size: 10m, max-file: '3'}
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cycling_demo
+      POSTGRES_USER: cycling
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a database password}
+    volumes:
+      - database:/var/lib/postgresql/data
+      - ../../db.sql:/docker-entrypoint-initdb.d/001-catalog.sql:ro
+    mem_limit: 1g
+    pids_limit: 128
+    logging: *logging
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U cycling -d cycling_demo']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  app:
+    image: cycling-demo:${RELEASE_TAG:-latest}
+    build:
+      context: ../..
+      dockerfile: deploy/demo/Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DEMO_MODE: 'true'
+      SERVE_FRONTEND: 'true'
+      FRONTEND_URL: https://${DEMO_HOST:?Set the demo hostname}
+      TRUST_PROXY_HOPS: '1'
+      DB_HOST: db
+      DB_PORT: '5432'
+      DB_NAME: cycling_demo
+      DB_USER: cycling
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?Set a database password}
+      NODE_OPTIONS: --max-old-space-size=320
+    mem_limit: 512m
+    pids_limit: 128
+    read_only: true
+    tmpfs: [/tmp:size=16m]
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    logging: *logging
+    networks:
+      default:
+      edge:
+        aliases: [cycling-demo-app]
+    depends_on:
+      db: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, node, '-e', "fetch('http://127.0.0.1:5001/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+volumes:
+  database:
+networks:
+  edge:
+    external: true
+    name: portfolio-edge

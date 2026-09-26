@@ -203,7 +203,7 @@ test("security headers, malformed requests and sign-in limits", async (t) => {
           { Authorization: "Bearer admin-secret" },
         )
       ).status,
-      400,
+      401, // Legacy bearer tokens cannot authorize product writes.
     );
   }
   for (let n = 0; n < 20; n++) await client.request("/api/auth/login", {});

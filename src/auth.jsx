@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { api } from "./api";
 const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
+  const [demo, setDemo] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [googleAvailable, setGoogleAvailable] = useState(false);
@@ -9,7 +10,12 @@ export function AuthProvider({ children }) {
   async function refresh() {
     setError("");
     try {
-      const data = await api("/auth/me");
+      let data = await api("/auth/me");
+      if (data.demo && !data.user) {
+        data = await api("/demo/start", { method: "POST", body: "{}" });
+        try { localStorage.removeItem("winner-compare"); } catch { /* Storage is optional. */ }
+      }
+      setDemo(!!data.demo);
       setUser(data.user);
       setGoogleAvailable(data.googleAvailable);
     } catch (err) {
@@ -22,12 +28,13 @@ export function AuthProvider({ children }) {
     refresh();
   }, []);
   async function logout() {
+    if (demo) { await api("/demo/reset", { method: "POST", body: "{}" }); window.location.assign("/"); return; }
     await api("/auth/logout", { method: "POST", body: "{}" });
     setUser(null);
   }
   return (
     <AuthContext.Provider
-      value={{ user, setUser, loading, googleAvailable, logout }}
+      value={{ demo, user, setUser, loading, googleAvailable, logout }}
     >
       {loading ? (
         <div className="page-status" role="status">

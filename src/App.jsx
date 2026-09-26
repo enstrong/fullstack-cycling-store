@@ -8,6 +8,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+import DemoBar from "@/components/demo-bar.jsx";
 import Header from "@/components/header.jsx";
 import Footer from "@/components/footer.jsx";
 import ScrollToTop from "@/components/scrollTop.jsx";
@@ -48,6 +49,7 @@ export default function App() {
           <RoutePosition />
           <SectionEntrances />
           <div className="wrapper" onPointerOver={preloadRoute} onFocus={preloadRoute} onTouchStart={preloadRoute}>
+            <DemoBar />
             <Header />
 
             <div className="route-content">

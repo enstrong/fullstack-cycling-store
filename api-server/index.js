@@ -11,6 +11,8 @@ const { registerAuth, transaction, cartFor, fail } = require("./auth");
 
 function createApp(pool, config = {}) {
   const app = express();
+  const demo = config.demo ?? process.env.DEMO_MODE === "true";
+  const owner = (req) => demo ? req.user.user_id : null;
   const proxyHops = Number(process.env.TRUST_PROXY_HOPS || 0);
   if (!Number.isInteger(proxyHops) || proxyHops < 0 || proxyHops > 5)
     throw new Error("TRUST_PROXY_HOPS must be an integer from 0 to 5.");
@@ -101,7 +103,8 @@ function createApp(pool, config = {}) {
     new URL(google.redirectUri).protocol !== "https:"
   )
     throw new Error("GOOGLE_REDIRECT_URI must use HTTPS in production.");
-  registerAuth(app, pool, {
+  if (demo) require("./demo").registerDemo(app, pool);
+  else registerAuth(app, pool, {
     frontendUrl,
     google,
   });
@@ -119,15 +122,16 @@ function createApp(pool, config = {}) {
       .json({ message: "Administrator access required." });
   }
   app.get("/api/categories", async (req, res) =>
-    res.set("Cache-Control", "public, max-age=0, must-revalidate").json(
+    res.set("Cache-Control", demo ? "private, no-store" : "public, max-age=0, must-revalidate").json(
       (await pool.query("SELECT * FROM categories ORDER BY category_id")).rows,
     ),
   );
   app.get("/api/products", async (req, res) =>
-    res.set("Cache-Control", "public, max-age=0, must-revalidate").json(
+    res.set("Cache-Control", demo ? "private, no-store" : "public, max-age=0, must-revalidate").json(
       (
         await pool.query(
-          "SELECT p.*,c.section FROM products p JOIN categories c USING(category_id) ORDER BY p.product_id",
+          "SELECT p.*,c.section FROM products p JOIN categories c USING(category_id) WHERE p.demo_user_id IS NOT DISTINCT FROM $1::integer ORDER BY p.product_id",
+          [owner(req)],
         )
       ).rows,
     ),
@@ -183,24 +187,31 @@ function createApp(pool, config = {}) {
     ];
   }
   app.post("/api/products", requireAdmin, async (req, res) => {
-    const result = await pool.query(
-      "INSERT INTO products(category_id,name,description,price,icon,stock_quantity) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
-      productValues(req.body),
-    );
+    const result = await transaction(pool, async (client) => {
+      if (demo) {
+        await client.query("SELECT user_id FROM users WHERE user_id=$1 FOR UPDATE", [owner(req)]);
+        const count = await client.query("SELECT count(*) FROM products WHERE demo_user_id=$1", [owner(req)]);
+        if (Number(count.rows[0].count) >= 100) throw fail(429, "Demo limit: 100 products. Reset your demo to start again.");
+      }
+      return client.query(
+        "INSERT INTO products(category_id,name,description,price,icon,stock_quantity,demo_user_id) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *",
+        [...productValues(req.body), owner(req)],
+      );
+    });
     res.status(201).json(result.rows[0]);
   });
   app.put("/api/products/:id", requireAdmin, async (req, res) => {
     const result = await pool.query(
-      "UPDATE products SET research=CASE WHEN name=$2 AND category_id=$1 THEN research ELSE NULL END,category_id=$1,name=$2,description=$3,price=$4,icon=$5,stock_quantity=$6 WHERE product_id=$7 RETURNING *",
-      [...productValues(req.body), req.params.id],
+      "UPDATE products SET research=CASE WHEN name=$2 AND category_id=$1 THEN research ELSE NULL END,category_id=$1,name=$2,description=$3,price=$4,icon=$5,stock_quantity=$6 WHERE product_id=$7 AND demo_user_id IS NOT DISTINCT FROM $8::integer RETURNING *",
+      [...productValues(req.body), req.params.id, owner(req)],
     );
     if (!result.rowCount) throw fail(404, "Product not found.");
     res.json(result.rows[0]);
   });
   app.delete("/api/products/:id", requireAdmin, async (req, res) => {
     const result = await pool.query(
-      "DELETE FROM products WHERE product_id=$1 RETURNING *",
-      [req.params.id],
+      "DELETE FROM products WHERE product_id=$1 AND demo_user_id IS NOT DISTINCT FROM $2::integer RETURNING *",
+      [req.params.id, owner(req)],
     );
     if (!result.rowCount) throw fail(404, "Product not found.");
     res.json({ message: "Product deleted." });
@@ -235,8 +246,8 @@ function createApp(pool, config = {}) {
       const id = await cartFor(client, req, res);
       const product = (
         await client.query(
-          "SELECT stock_quantity FROM products WHERE product_id=$1",
-          [product_id],
+          "SELECT stock_quantity FROM products WHERE product_id=$1 AND demo_user_id IS NOT DISTINCT FROM $2::integer",
+          [product_id, owner(req)],
         )
       ).rows[0];
       if (!product) throw fail(404, "Product not found.");
@@ -307,12 +318,17 @@ function createApp(pool, config = {}) {
     const customer_name = `${values.first_name} ${values.last_name}`;
     const shipping_address = formatShipping(values, country);
     const order = await transaction(pool, async (client) => {
+      if (demo) {
+        await client.query("SELECT user_id FROM users WHERE user_id=$1 FOR UPDATE", [owner(req)]);
+        const count = await client.query("SELECT count(*) FROM orders WHERE user_id=$1", [owner(req)]);
+        if (Number(count.rows[0].count) >= 50) throw fail(429, "Demo limit: 50 orders. Reset your demo to start again.");
+      }
       const cartId = await cartFor(client, req, res);
       const items = (
         await client.query(
           `SELECT ci.product_id,ci.quantity,p.price,p.stock_quantity,p.name,p.icon
-        FROM cart_items ci JOIN products p USING(product_id) WHERE ci.cart_id=$1 ORDER BY p.product_id FOR UPDATE OF ci,p`,
-          [cartId],
+        FROM cart_items ci JOIN products p USING(product_id) WHERE ci.cart_id=$1 AND p.demo_user_id IS NOT DISTINCT FROM $2::integer ORDER BY p.product_id FOR UPDATE OF ci,p`,
+          [cartId, owner(req)],
         )
       ).rows;
       if (!items.length) throw fail(400, "Your cart is empty.");
@@ -416,7 +432,13 @@ function createApp(pool, config = {}) {
 if (require.main === module) {
   const pool = createPool();
   migrate(pool)
-    .then(() => {
+    .then(async () => {
+      if (process.env.DEMO_MODE === "true") {
+        const { cleanupDemo } = require("./demo");
+        const cleanup = () => cleanupDemo(pool).catch(() => console.error("Demo cleanup failed; will retry."));
+        await cleanup();
+        setInterval(cleanup, 15 * 60000).unref();
+      }
       const port = process.env.PORT || 5001;
       const host =
         process.env.HOST ||

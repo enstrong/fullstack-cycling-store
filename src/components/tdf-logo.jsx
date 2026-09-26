@@ -1,4 +1,4 @@
-// Geometry from the supplied Tour_de_France_logo.svg; fills are controlled by the header theme.
+// Geometry from src/assets/branding/tour-de-france.svg; fills are controlled by the header theme.
 export default function TourLogo() {
   return (
     <svg className="header__logo header__logo-tdf" viewBox="0 0 192.756 192.756" aria-hidden="true" focusable="false">

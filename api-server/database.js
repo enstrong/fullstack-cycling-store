@@ -28,6 +28,7 @@ async function migrate(pool) {
       "004-safety-constraints",
       "005-shipping-details",
       "006-product-research",
+      "007-demo",
     ]) {
       const done = await client.query(
         "SELECT name FROM schema_migrations WHERE name=$1",

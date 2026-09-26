@@ -1,0 +1,9 @@
+cycling.158-180-40-180.sslip.io {
+    encode gzip zstd
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy same-origin
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    }
+    reverse_proxy cycling-demo-app:5001
+}

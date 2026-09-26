@@ -108,3 +108,33 @@
 .buy-now .bikes-section__button:hover {
   color: #101110;
 }
+
+/* Keep the landing-page copy within narrow phone viewports. */
+@media (max-width: 700px) {
+  :is(.colnago-bg, .cervelo-bg, .pinarello-bg, .sworks-bg) > .container {
+    min-width: 0;
+    padding-block: 100px 40px;
+  }
+
+  .bikes-section__title {
+    font-size: clamp(36px, 11vw, 70px);
+    line-height: 1.08;
+    overflow-wrap: anywhere;
+  }
+
+  .buy-now {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .bikes-section__text {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-top: 16px;
+  }
+
+  .buy-now q {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}

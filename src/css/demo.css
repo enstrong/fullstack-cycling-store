@@ -1,0 +1,13 @@
+.demo-bar { position: relative; z-index: 110; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; padding: 12px 5%; background: #20241e; color: #f5f6f0; font: 13px/1.5 system-ui, sans-serif; }
+.demo-bar strong { margin-right: 14px; }
+.demo-bar span { color: #c5cabb; }
+.demo-bar nav { display: flex; align-items: center; gap: 16px; }
+.demo-bar a, .demo-bar button { color: inherit; font: inherit; background: none; border: 0; padding: 3px 0; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.demo-bar button:disabled { opacity: .5; }
+.demo-bar p { flex-basis: 100%; margin: 0; }
+.demo-fill { margin-bottom: 16px; }
+@media (max-width: 600px) { .demo-bar strong, .demo-bar span { display: block; } .demo-bar { padding: 10px 20px; } }
+
+.has-demo { padding-top: var(--demo-height, 80px); }
+.has-demo .demo-bar { position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; }
+.has-demo .header { top: var(--demo-height, 80px); }
